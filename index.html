@@ -1,0 +1,2950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Professor Academic Profile</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+:root{
+    --navy:#071a2f;
+    --navy2:#0c2744;
+    --teal:#00a6a6;
+    --teal2:#18c7c7;
+
+    --white:#ffffff;
+    --light:#f4f8fb;
+    --light2:#e9f1f6;
+
+    --text:#17212b;
+    --muted:#667789;
+
+    --border:#dbe5ec;
+
+    --shadow:0 15px 40px rgba(7,26,47,.10);
+
+    --radius:18px;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:var(--light);
+    color:var(--text);
+    line-height:1.6;
+    transition:.3s;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+button{
+    font-family:inherit;
+}
+
+.container{
+    width:min(1180px,92%);
+    margin:auto;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+    position:sticky;
+    top:0;
+    z-index:1000;
+
+    background:rgba(255,255,255,.94);
+    backdrop-filter:blur(15px);
+
+    border-bottom:1px solid var(--border);
+}
+
+.nav-container{
+    min-height:76px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:30px;
+}
+
+
+/* SECRET ADMIN AREA */
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    cursor:default;
+    user-select:none;
+}
+
+.brand-logo{
+    width:46px;
+    height:46px;
+
+    border-radius:13px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:white;
+
+    font-weight:800;
+    font-size:16px;
+
+    background:
+        linear-gradient(135deg,
+        var(--teal),
+        var(--navy));
+}
+
+.brand-text{
+    display:flex;
+    flex-direction:column;
+}
+
+.brand-text strong{
+    color:var(--navy);
+    font-size:15px;
+}
+
+.brand-text span{
+    color:var(--muted);
+    font-size:11px;
+}
+
+
+/* NAV LINKS */
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:22px;
+}
+
+.nav-links a{
+    font-size:14px;
+    color:#4f6070;
+
+    transition:.2s;
+}
+
+.nav-links a:hover{
+    color:var(--teal);
+}
+
+.dark-btn{
+    border:0;
+
+    width:38px;
+    height:38px;
+
+    border-radius:50%;
+
+    background:var(--navy);
+    color:white;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    transition:.2s;
+}
+
+.dark-btn:hover{
+    transform:rotate(25deg);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        radial-gradient(circle at 90% 10%,
+        rgba(24,199,199,.25),
+        transparent 35%),
+
+        linear-gradient(135deg,
+        var(--navy),
+        var(--navy2));
+
+    color:white;
+
+    padding:80px 0 90px;
+}
+
+.hero-grid{
+    display:grid;
+
+    grid-template-columns:300px 1fr;
+
+    gap:55px;
+
+    align-items:center;
+}
+
+
+/* PROFESSOR PHOTO */
+
+.profile-photo-box{
+    position:relative;
+}
+
+.profile-photo{
+    width:270px;
+    height:270px;
+
+    object-fit:cover;
+
+    border-radius:50%;
+
+    border:8px solid rgba(255,255,255,.15);
+
+    background:#dce5eb;
+
+    display:block;
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,.3);
+}
+
+.verified{
+    position:absolute;
+
+    right:20px;
+    bottom:25px;
+
+    background:var(--teal);
+
+    width:42px;
+    height:42px;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-weight:bold;
+
+    border:4px solid var(--navy);
+}
+
+
+/* HERO CONTENT */
+
+.hero-small{
+    color:var(--teal2);
+
+    text-transform:uppercase;
+
+    letter-spacing:2px;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    margin-bottom:10px;
+}
+
+.hero h1{
+    font-size:clamp(35px,5vw,62px);
+
+    line-height:1.05;
+
+    margin-bottom:18px;
+}
+
+.hero-role{
+    font-size:20px;
+
+    color:#d9f8f8;
+
+    margin-bottom:8px;
+}
+
+.hero-college{
+    color:#b6c7d7;
+
+    margin-bottom:22px;
+}
+
+.hero-location{
+    color:#b6c7d7;
+
+    font-size:14px;
+
+    margin-bottom:28px;
+}
+
+.hero-buttons{
+    display:flex;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+}
+
+.btn{
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:12px 20px;
+
+    border-radius:10px;
+
+    border:1px solid transparent;
+
+    cursor:pointer;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+    transition:.2s;
+}
+
+.btn-primary{
+    background:var(--teal);
+
+    color:white;
+}
+
+.btn-primary:hover{
+    transform:translateY(-2px);
+
+    background:var(--teal2);
+}
+
+.btn-outline{
+    border-color:rgba(255,255,255,.3);
+
+    color:white;
+
+    background:rgba(255,255,255,.06);
+}
+
+.btn-outline:hover{
+    background:rgba(255,255,255,.13);
+}
+
+
+/* =========================================================
+   METRICS
+========================================================= */
+
+.metrics{
+    margin-top:-42px;
+
+    position:relative;
+
+    z-index:5;
+}
+
+.metrics-grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(7,1fr);
+
+    gap:12px;
+}
+
+.metric{
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:16px;
+
+    padding:20px 12px;
+
+    text-align:center;
+
+    box-shadow:var(--shadow);
+
+    transition:.2s;
+}
+
+.metric:hover{
+    transform:translateY(-4px);
+}
+
+.metric-value{
+    font-size:27px;
+
+    font-weight:800;
+
+    color:var(--navy);
+}
+
+.metric-label{
+    font-size:11px;
+
+    color:var(--muted);
+
+    margin-top:4px;
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+section{
+    padding:75px 0;
+}
+
+.section-head{
+    margin-bottom:35px;
+}
+
+.section-kicker{
+    color:var(--teal);
+
+    text-transform:uppercase;
+
+    font-size:12px;
+
+    letter-spacing:2px;
+
+    font-weight:bold;
+
+    margin-bottom:7px;
+}
+
+.section-title{
+    color:var(--navy);
+
+    font-size:32px;
+
+    line-height:1.2;
+}
+
+.section-description{
+    color:var(--muted);
+
+    max-width:720px;
+
+    margin-top:10px;
+}
+
+
+/* =========================================================
+   ABOUT
+========================================================= */
+
+.about-grid{
+    display:grid;
+
+    grid-template-columns:1.3fr .7fr;
+
+    gap:25px;
+}
+
+.card{
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius);
+
+    padding:28px;
+
+    box-shadow:var(--shadow);
+}
+
+.about-text{
+    color:#526273;
+
+    font-size:16px;
+
+    white-space:pre-line;
+}
+
+.info-list{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:17px;
+}
+
+.info-item{
+    padding-bottom:15px;
+
+    border-bottom:1px solid var(--border);
+}
+
+.info-item:last-child{
+    border-bottom:0;
+}
+
+.info-label{
+    font-size:11px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    color:var(--muted);
+}
+
+.info-value{
+    margin-top:3px;
+
+    font-weight:bold;
+
+    color:var(--navy);
+}
+
+
+/* =========================================================
+   RESEARCH
+========================================================= */
+
+.research-tags{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+}
+
+.research-tag{
+    background:#e8f8f8;
+
+    color:#087979;
+
+    padding:10px 15px;
+
+    border-radius:30px;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+
+
+/* =========================================================
+   TIMELINE
+========================================================= */
+
+.timeline{
+    position:relative;
+
+    margin-left:12px;
+}
+
+.timeline::before{
+    content:"";
+
+    position:absolute;
+
+    left:8px;
+
+    top:0;
+    bottom:0;
+
+    width:2px;
+
+    background:#c9e8e8;
+}
+
+.timeline-item{
+    position:relative;
+
+    padding-left:38px;
+
+    margin-bottom:30px;
+}
+
+.timeline-dot{
+    position:absolute;
+
+    left:0;
+    top:4px;
+
+    width:18px;
+    height:18px;
+
+    border-radius:50%;
+
+    background:var(--teal);
+
+    border:4px solid white;
+
+    box-shadow:0 0 0 2px #bde4e4;
+}
+
+.timeline-year{
+    color:var(--teal);
+
+    font-weight:bold;
+
+    font-size:13px;
+}
+
+.timeline-title{
+    font-size:19px;
+
+    color:var(--navy);
+
+    font-weight:bold;
+
+    margin:3px 0;
+}
+
+.timeline-description{
+    color:var(--muted);
+
+    font-size:14px;
+}
+
+
+/* =========================================================
+   GRID CARDS
+========================================================= */
+
+.cards-grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:18px;
+}
+
+.data-card{
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:16px;
+
+    padding:23px;
+
+    box-shadow:var(--shadow);
+
+    transition:.2s;
+}
+
+.data-card:hover{
+    transform:translateY(-4px);
+}
+
+.data-card h3{
+    color:var(--navy);
+
+    font-size:18px;
+
+    margin-bottom:8px;
+}
+
+.data-card .small{
+    color:var(--teal);
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    margin-bottom:7px;
+}
+
+.data-card p{
+    color:var(--muted);
+
+    font-size:14px;
+}
+
+.data-card a{
+    display:inline-block;
+
+    color:var(--teal);
+
+    margin-top:10px;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+
+
+/* =========================================================
+   PUBLICATIONS
+========================================================= */
+
+.publication-list{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+}
+
+.publication{
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:15px;
+
+    padding:20px 23px;
+
+    display:grid;
+
+    grid-template-columns:60px 1fr;
+
+    gap:20px;
+
+    box-shadow:0 8px 25px rgba(7,26,47,.06);
+}
+
+.pub-year{
+    color:var(--teal);
+
+    font-weight:bold;
+
+    font-size:14px;
+}
+
+.pub-title{
+    font-size:16px;
+
+    font-weight:bold;
+
+    color:var(--navy);
+}
+
+.pub-authors{
+    font-size:13px;
+
+    color:var(--muted);
+
+    margin-top:4px;
+}
+
+.pub-type{
+    display:inline-block;
+
+    margin-top:8px;
+
+    padding:4px 9px;
+
+    border-radius:6px;
+
+    background:#edf6fa;
+
+    color:#456476;
+
+    font-size:11px;
+}
+
+
+/* =========================================================
+   CONTACT
+========================================================= */
+
+.contact-section{
+    background:
+        linear-gradient(135deg,
+        var(--navy),
+        var(--navy2));
+
+    color:white;
+}
+
+.contact-section .section-title{
+    color:white;
+}
+
+.contact-grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:18px;
+}
+
+.contact-card{
+    background:rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,255,255,.14);
+
+    border-radius:16px;
+
+    padding:24px;
+}
+
+.contact-card span{
+    display:block;
+
+    color:#91aaaa;
+
+    font-size:11px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    margin-bottom:5px;
+}
+
+.contact-card strong{
+    color:white;
+
+    word-break:break-word;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+    background:#041221;
+
+    color:#7f95a9;
+
+    padding:25px 0;
+
+    font-size:13px;
+}
+
+.footer-content{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty{
+    padding:30px;
+
+    text-align:center;
+
+    background:white;
+
+    border:1px dashed #cbd9e2;
+
+    border-radius:15px;
+
+    color:var(--muted);
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+body.dark{
+    --light:#07131f;
+    --light2:#0c1c2b;
+
+    --white:#0c1c2b;
+
+    --text:#e8f1f6;
+
+    --muted:#9fb0bf;
+
+    --border:#203547;
+
+    background:#07131f;
+    color:#e8f1f6;
+}
+
+body.dark .navbar{
+    background:rgba(7,19,31,.94);
+}
+
+body.dark .brand-text strong{
+    color:white;
+}
+
+body.dark .brand-text span{
+    color:#8fa5b7;
+}
+
+body.dark .nav-links a{
+    color:#aebdca;
+}
+
+body.dark .metric,
+body.dark .card,
+body.dark .data-card,
+body.dark .publication,
+body.dark .empty{
+    background:#0c1c2b;
+
+    border-color:#203547;
+}
+
+body.dark .metric-value,
+body.dark .section-title,
+body.dark .timeline-title,
+body.dark .data-card h3,
+body.dark .pub-title,
+body.dark .info-value{
+    color:white;
+}
+
+body.dark .about-text{
+    color:#aebdca;
+}
+
+body.dark .pub-type{
+    background:#142b3c;
+
+    color:#a9c0cf;
+}
+
+body.dark .research-tag{
+    background:#103536;
+
+    color:#77dddd;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1050px){
+
+    .metrics-grid{
+        grid-template-columns:
+        repeat(4,1fr);
+    }
+
+    .cards-grid{
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:800px){
+
+    .nav-links a{
+        display:none;
+    }
+
+    .hero-grid{
+        grid-template-columns:1fr;
+
+        text-align:center;
+    }
+
+    .profile-photo-box{
+        margin:auto;
+    }
+
+    .hero-buttons{
+        justify-content:center;
+    }
+
+    .about-grid{
+        grid-template-columns:1fr;
+    }
+
+    .contact-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .nav-container{
+        min-height:65px;
+    }
+
+    .brand-text strong{
+        font-size:12px;
+    }
+
+    .hero{
+        padding:55px 0 75px;
+    }
+
+    .profile-photo{
+        width:210px;
+        height:210px;
+    }
+
+    .metrics-grid{
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+    .cards-grid{
+        grid-template-columns:1fr;
+    }
+
+    section{
+        padding:55px 0;
+    }
+
+    .section-title{
+        font-size:27px;
+    }
+
+    .publication{
+        grid-template-columns:1fr;
+
+        gap:5px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<header class="navbar">
+
+    <div class="container nav-container">
+
+        <!--
+            IMPORTANT:
+            Double-click this area to open Admin.
+            No Admin button is displayed.
+        -->
+
+        <div
+            class="brand secret-admin-trigger"
+            title="">
+
+            <div class="brand-logo">
+                PA
+            </div>
+
+            <div class="brand-text">
+
+                <strong>
+                    Professor Academic Profile
+                </strong>
+
+                <span>
+                    Academic Portfolio
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="nav-links">
+
+            <a href="#about">
+                About
+            </a>
+
+            <a href="#research">
+                Research
+            </a>
+
+            <a href="#education">
+                Education
+            </a>
+
+            <a href="#experience">
+                Experience
+            </a>
+
+            <a href="#publications">
+                Publications
+            </a>
+
+            <a href="#contact">
+                Contact
+            </a>
+
+            <button
+                class="dark-btn"
+                id="darkModeBtn"
+                title="Dark Mode">
+
+                ◐
+
+            </button>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero">
+
+    <div class="container hero-grid">
+
+        <div class="profile-photo-box">
+
+            <img
+                id="profilePhoto"
+                class="profile-photo"
+                src=""
+                alt="Professor">
+
+            <div class="verified">
+                ✓
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <div class="hero-small">
+                Verified Academic Profile
+            </div>
+
+            <h1 id="professorName">
+                Professor Name
+            </h1>
+
+            <div
+                class="hero-role"
+                id="professorDesignation">
+
+                Professor / Associate Professor
+
+            </div>
+
+            <div
+                class="hero-college"
+                id="professorDepartment">
+
+                Department of Computer Science
+
+            </div>
+
+            <div
+                class="hero-college"
+                id="professorCollege">
+
+                College / University
+
+            </div>
+
+            <div
+                class="hero-location"
+                id="professorLocation">
+
+                📍 Location
+
+            </div>
+
+
+            <div class="hero-buttons">
+
+                <a
+                    href="#contact"
+                    class="btn btn-primary">
+
+                    Contact Professor
+
+                </a>
+
+                <button
+                    onclick="window.print()"
+                    class="btn btn-outline">
+
+                    Print Profile
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     METRICS
+===================================================== -->
+
+<div class="metrics">
+
+    <div class="container">
+
+        <div class="metrics-grid">
+
+            <div class="metric">
+
+                <div
+                    class="metric-value"
+                    id="metricPublications">
+                    0
+                </div>
+
+                <div class="metric-label">
+                    Publications
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div
+                    class="metric-value"
+                    id="metricCitations">
+                    0
+                </div>
+
+                <div class="metric-label">
+                    Citations
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div
+                    class="metric-value"
+                    id="metricHIndex">
+                    0
+                </div>
+
+                <div class="metric-label">
+                    h-index
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div
+                    class="metric-value"
+                    id="metricI10">
+                    0
+                </div>
+
+                <div class="metric-label">
+                    i10-index
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div
+                    class="metric-value"
+                    id="metricPatents">
+                    0
+                </div>
+
+                <div class="metric-label">
+                    Patents
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div
+                    class="metric-value"
+                    id="metricBooks">
+                    0
+                </div>
+
+                <div class="metric-label">
+                    Books / Chapters
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div
+                    class="metric-value"
+                    id="metricExperience">
+                    0
+                </div>
+
+                <div class="metric-label">
+                    Years Experience
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ABOUT
+===================================================== -->
+
+<section id="about">
+
+    <div class="container">
+
+        <div class="section-head">
+
+            <div class="section-kicker">
+                Profile
+            </div>
+
+            <h2 class="section-title">
+                About the Professor
+            </h2>
+
+        </div>
+
+
+        <div class="about-grid">
+
+            <div class="card">
+
+                <p
+                    class="about-text"
+                    id="professorBio">
+
+                    Academic profile information will appear here.
+
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="info-list">
+
+                    <div class="info-item">
+
+                        <div class="info-label">
+                            Qualification
+                        </div>
+
+                        <div
+                            class="info-value"
+                            id="professorQualification">
+
+                            —
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <div class="info-label">
+                            Department
+                        </div>
+
+                        <div
+                            class="info-value"
+                            id="aboutDepartment">
+
+                            —
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <div class="info-label">
+                            Institution
+                        </div>
+
+                        <div
+                            class="info-value"
+                            id="aboutCollege">
+
+                            —
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <div class="info-label">
+                            Location
+                        </div>
+
+                        <div
+                            class="info-value"
+                            id="aboutLocation">
+
+                            —
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     RESEARCH
+===================================================== -->
+
+<section
+    id="research"
+    style="background:#eef5f8;">
+
+    <div class="container">
+
+        <div class="section-head">
+
+            <div class="section-kicker">
+                Research
+            </div>
+
+            <h2 class="section-title">
+                Research Interests
+            </h2>
+
+            <p class="section-description">
+                Areas of research, teaching and academic interest.
+            </p>
+
+        </div>
+
+
+        <div
+            class="research-tags"
+            id="researchAreas">
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ACADEMIC JOURNEY
+===================================================== -->
+
+<section>
+
+    <div class="container">
+
+        <div class="section-head">
+
+            <div class="section-kicker">
+                Journey
+            </div>
+
+            <h2 class="section-title">
+                Academic Journey
+            </h2>
+
+        </div>
+
+
+        <div
+            class="timeline"
+            id="journeyList">
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     EDUCATION
+===================================================== -->
+
+<section
+    id="education"
+    style="background:#eef5f8;">
+
+    <div class="container">
+
+        <div class="section-head">
+
+            <div class="section-kicker">
+                Education
+            </div>
+
+            <h2 class="section-title">
+                Academic Qualifications
+            </h2>
+
+        </div>
+
+
+        <div
+            class="cards-grid"
+            id="educationList">
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     EXPERIENCE
+===================================================== -->
+
+<section id="experience">
+
+    <div class="container">
+
+        <div class="section-head">
+
+            <div class="section-kicker">
+                Career
+            </div>
+
+            <h2 class="section-title">
+                Professional Experience
+            </h2>
+
+        </div>
+
+
+        <div
+            class="cards-grid"
+            id="experienceList">
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PUBLICATIONS
+===================================================== -->
+
+<section
+    id="publications"
+    style="background:#eef5f8;">
+
+    <div class="container">
+
+        <div class="section-head">
+
+            <div class="section-kicker">
+                Research Output
+            </div>
+
+            <h2 class="section-title">
+                Selected Publications
+            </h2>
+
+        </div>
+
+
+        <div
+            class="publication-list"
+            id="publicationList">
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PATENTS
+===================================================== -->
+
+<section>
+
+    <div class="container">
+
+        <div class="section-head">
+
+            <div class="section-kicker">
+                Innovation
+            </div>
+
+            <h2 class="section-title">
+                Patents
+            </h2>
+
+        </div>
+
+
+        <div
+            class="cards-grid"
+            id="patentList">
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PROJECTS
+===================================================== -->
+
+<section
+    style="background:#eef5f8;">
+
+    <div class="container">
+
+        <div class="section-head">
+
+            <div class="section-kicker">
+                Research
+            </div>
+
+            <h2 class="section-title">
+                Research Projects
+            </h2>
+
+        </div>
+
+
+        <div
+            class="cards-grid"
+            id="projectList">
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     AWARDS
+===================================================== -->
+
+<section>
+
+    <div class="container">
+
+        <div class="section-head">
+
+            <div class="section-kicker">
+                Recognition
+            </div>
+
+            <h2 class="section-title">
+                Awards & Achievements
+            </h2>
+
+        </div>
+
+
+        <div
+            class="cards-grid"
+            id="awardList">
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     IDENTIFIERS
+===================================================== -->
+
+<section
+    style="background:#eef5f8;">
+
+    <div class="container">
+
+        <div class="section-head">
+
+            <div class="section-kicker">
+                Academic Identity
+            </div>
+
+            <h2 class="section-title">
+                Academic Identifiers
+            </h2>
+
+        </div>
+
+
+        <div class="cards-grid">
+
+            <div class="data-card">
+
+                <div class="small">
+                    VIDWAN
+                </div>
+
+                <h3 id="vidwan">
+                    —
+                </h3>
+
+            </div>
+
+
+            <div class="data-card">
+
+                <div class="small">
+                    ORCID
+                </div>
+
+                <h3 id="orcid">
+                    —
+                </h3>
+
+            </div>
+
+
+            <div class="data-card">
+
+                <div class="small">
+                    Google Scholar
+                </div>
+
+                <h3 id="googleScholar">
+                    —
+                </h3>
+
+            </div>
+
+
+            <div class="data-card">
+
+                <div class="small">
+                    Scopus
+                </div>
+
+                <h3 id="scopus">
+                    —
+                </h3>
+
+            </div>
+
+
+            <div class="data-card">
+
+                <div class="small">
+                    Researcher ID
+                </div>
+
+                <h3 id="researcherId">
+                    —
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CONTACT
+===================================================== -->
+
+<section
+    id="contact"
+    class="contact-section">
+
+    <div class="container">
+
+        <div class="section-head">
+
+            <div class="section-kicker">
+                Contact
+            </div>
+
+            <h2 class="section-title">
+                Get in Touch
+            </h2>
+
+        </div>
+
+
+        <div class="contact-grid">
+
+            <div class="contact-card">
+
+                <span>
+                    Email
+                </span>
+
+                <strong id="contactEmail">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="contact-card">
+
+                <span>
+                    Phone
+                </span>
+
+                <strong id="contactPhone">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="contact-card">
+
+                <span>
+                    Address
+                </span>
+
+                <strong id="contactAddress">
+                    —
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <div class="container footer-content">
+
+        <div>
+            © <span id="footerYear"></span>
+            Professor Academic Profile
+        </div>
+
+        <div>
+            Academic Portfolio
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+const STORAGE_KEY = "professorProfile";
+const PHOTO_KEY = "professorPhoto";
+
+
+/* =========================================================
+   SECURITY HELPERS
+========================================================= */
+
+function escapeHTML(value){
+
+    if(value === null || value === undefined){
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+function safeURL(url){
+
+    if(!url){
+        return "";
+    }
+
+    const value = String(url).trim();
+
+    if(
+        value.startsWith("https://") ||
+        value.startsWith("http://")
+    ){
+        return value;
+    }
+
+    return "";
+}
+
+
+/* =========================================================
+   LOAD PROFILE
+========================================================= */
+
+function loadProfile(){
+
+    let data = null;
+
+    try{
+
+        const saved =
+            localStorage.getItem(STORAGE_KEY);
+
+        if(saved){
+            data = JSON.parse(saved);
+        }
+
+    }catch(error){
+
+        console.error(
+            "Unable to load profile:",
+            error
+        );
+
+    }
+
+
+    if(!data){
+
+        document.title =
+            "Professor Academic Profile";
+
+        renderEmptySections();
+
+        return;
+    }
+
+
+    /* =====================================================
+       BASIC DETAILS
+    ===================================================== */
+
+    document.title =
+        data.name
+        ? data.name + " | Academic Profile"
+        : "Professor Academic Profile";
+
+
+    document.getElementById("professorName")
+        .textContent =
+        data.name || "Professor Name";
+
+
+    document.getElementById("professorDesignation")
+        .textContent =
+        data.designation ||
+        "Professor / Associate Professor";
+
+
+    document.getElementById("professorDepartment")
+        .textContent =
+        data.department ||
+        "Department";
+
+
+    document.getElementById("professorCollege")
+        .textContent =
+        data.college ||
+        "College / University";
+
+
+    document.getElementById("professorLocation")
+        .textContent =
+        data.location
+        ? "📍 " + data.location
+        : "📍 Location";
+
+
+    document.getElementById("professorQualification")
+        .textContent =
+        data.qualification || "—";
+
+
+    document.getElementById("professorBio")
+        .textContent =
+        data.bio ||
+        "Academic profile information will appear here.";
+
+
+    document.getElementById("aboutDepartment")
+        .textContent =
+        data.department || "—";
+
+
+    document.getElementById("aboutCollege")
+        .textContent =
+        data.college || "—";
+
+
+    document.getElementById("aboutLocation")
+        .textContent =
+        data.location || "—";
+
+
+    /* =====================================================
+       PHOTO
+    ===================================================== */
+
+    const photo =
+        localStorage.getItem(PHOTO_KEY);
+
+    const photoElement =
+        document.getElementById("profilePhoto");
+
+
+    if(photo){
+
+        photoElement.src = photo;
+
+    }else{
+
+        /*
+            Default profile image using SVG.
+        */
+
+        photoElement.src =
+            "data:image/svg+xml;charset=UTF-8," +
+            encodeURIComponent(`
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="500"
+                     height="500"
+                     viewBox="0 0 500 500">
+
+                    <rect width="500"
+                          height="500"
+                          fill="#dce8ef"/>
+
+                    <circle cx="250"
+                            cy="190"
+                            r="90"
+                            fill="#9eb2bf"/>
+
+                    <path d="
+                        M110 450
+                        C125 335,
+                        180 300,
+                        250 300
+                        C320 300,
+                        375 335,
+                        390 450
+                        Z"
+                        fill="#8299a8"/>
+
+                    <text x="250"
+                          y="475"
+                          text-anchor="middle"
+                          font-family="Arial"
+                          font-size="22"
+                          fill="#ffffff">
+
+                        Professor
+
+                    </text>
+
+                </svg>
+            `);
+
+    }
+
+
+    /* =====================================================
+       METRICS
+    ===================================================== */
+
+    const metrics =
+        data.metrics || {};
+
+
+    document.getElementById("metricPublications")
+        .textContent =
+        metrics.publications || 0;
+
+
+    document.getElementById("metricCitations")
+        .textContent =
+        metrics.citations || 0;
+
+
+    document.getElementById("metricHIndex")
+        .textContent =
+        metrics.hIndex || 0;
+
+
+    document.getElementById("metricI10")
+        .textContent =
+        metrics.i10Index || 0;
+
+
+    document.getElementById("metricPatents")
+        .textContent =
+        metrics.patents || 0;
+
+
+    document.getElementById("metricBooks")
+        .textContent =
+        metrics.books || 0;
+
+
+    document.getElementById("metricExperience")
+        .textContent =
+        metrics.experienceYears || 0;
+
+
+    /* =====================================================
+       RESEARCH AREAS
+    ===================================================== */
+
+    const researchContainer =
+        document.getElementById("researchAreas");
+
+    researchContainer.innerHTML = "";
+
+    const researchAreas =
+        Array.isArray(data.researchAreas)
+        ? data.researchAreas
+        : [];
+
+
+    if(researchAreas.length === 0){
+
+        researchContainer.innerHTML =
+            '<div class="empty">No research areas added.</div>';
+
+    }else{
+
+        researchAreas.forEach(area => {
+
+            if(!area) return;
+
+            const tag =
+                document.createElement("div");
+
+            tag.className =
+                "research-tag";
+
+            tag.textContent =
+                area;
+
+            researchContainer.appendChild(tag);
+
+        });
+
+    }
+
+
+    /* =====================================================
+       ACADEMIC JOURNEY
+    ===================================================== */
+
+    const journeyContainer =
+        document.getElementById("journeyList");
+
+    journeyContainer.innerHTML = "";
+
+    const journey =
+        Array.isArray(data.journey)
+        ? data.journey
+        : [];
+
+
+    if(journey.length === 0){
+
+        journeyContainer.innerHTML =
+            '<div class="empty">No academic journey added.</div>';
+
+    }else{
+
+        journey.forEach(item => {
+
+            if(!item) return;
+
+            const element =
+                document.createElement("div");
+
+            element.className =
+                "timeline-item";
+
+            element.innerHTML = `
+
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-year">
+                    ${escapeHTML(item.year || "")}
+                </div>
+
+                <div class="timeline-title">
+                    ${escapeHTML(item.title || "")}
+                </div>
+
+                <div class="timeline-description">
+                    ${escapeHTML(item.description || "")}
+                </div>
+
+            `;
+
+            journeyContainer.appendChild(element);
+
+        });
+
+    }
+
+
+    /* =====================================================
+       EDUCATION
+    ===================================================== */
+
+    renderEducation(
+        Array.isArray(data.education)
+        ? data.education
+        : []
+    );
+
+
+    /* =====================================================
+       EXPERIENCE
+    ===================================================== */
+
+    renderExperience(
+        Array.isArray(data.experience)
+        ? data.experience
+        : []
+    );
+
+
+    /* =====================================================
+       PUBLICATIONS
+    ===================================================== */
+
+    renderPublications(
+        Array.isArray(data.publications)
+        ? data.publications
+        : []
+    );
+
+
+    /* =====================================================
+       PATENTS
+    ===================================================== */
+
+    renderPatents(
+        Array.isArray(data.patents)
+        ? data.patents
+        : []
+    );
+
+
+    /* =====================================================
+       PROJECTS
+    ===================================================== */
+
+    renderProjects(
+        Array.isArray(data.projects)
+        ? data.projects
+        : []
+    );
+
+
+    /* =====================================================
+       AWARDS
+    ===================================================== */
+
+    renderAwards(
+        Array.isArray(data.awards)
+        ? data.awards
+        : []
+    );
+
+
+    /* =====================================================
+       IDENTIFIERS
+    ===================================================== */
+
+    const identifiers =
+        data.identifiers || {};
+
+
+    setIdentifier(
+        "vidwan",
+        identifiers.vidwan
+    );
+
+    setIdentifier(
+        "orcid",
+        identifiers.orcid
+    );
+
+    setIdentifier(
+        "googleScholar",
+        identifiers.googleScholar
+    );
+
+    setIdentifier(
+        "scopus",
+        identifiers.scopus
+    );
+
+    setIdentifier(
+        "researcherId",
+        identifiers.researcherId
+    );
+
+
+    /* =====================================================
+       CONTACT
+    ===================================================== */
+
+    const contact =
+        data.contact || {};
+
+
+    document.getElementById("contactEmail")
+        .textContent =
+        contact.email || "—";
+
+
+    document.getElementById("contactPhone")
+        .textContent =
+        contact.phone || "—";
+
+
+    document.getElementById("contactAddress")
+        .textContent =
+        contact.address || "—";
+
+}
+
+
+/* =========================================================
+   IDENTIFIER
+========================================================= */
+
+function setIdentifier(id,value){
+
+    const element =
+        document.getElementById(id);
+
+    if(!element) return;
+
+    element.textContent =
+        value || "—";
+
+}
+
+
+/* =========================================================
+   EDUCATION
+========================================================= */
+
+function renderEducation(items){
+
+    const container =
+        document.getElementById("educationList");
+
+    container.innerHTML = "";
+
+
+    if(items.length === 0){
+
+        container.innerHTML =
+            '<div class="empty">No education details added.</div>';
+
+        return;
+    }
+
+
+    items.forEach(item => {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "data-card";
+
+
+        card.innerHTML = `
+
+            <div class="small">
+                ${escapeHTML(item.year || "")}
+            </div>
+
+            <h3>
+                ${escapeHTML(item.degree || "Qualification")}
+            </h3>
+
+            <p>
+                ${escapeHTML(item.institution || "")}
+            </p>
+
+            ${
+                item.specialization
+                ? `
+                    <p style="margin-top:7px;">
+                        ${escapeHTML(item.specialization)}
+                    </p>
+                  `
+                : ""
+            }
+
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+/* =========================================================
+   EXPERIENCE
+========================================================= */
+
+function renderExperience(items){
+
+    const container =
+        document.getElementById("experienceList");
+
+    container.innerHTML = "";
+
+
+    if(items.length === 0){
+
+        container.innerHTML =
+            '<div class="empty">No experience details added.</div>';
+
+        return;
+    }
+
+
+    items.forEach(item => {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "data-card";
+
+
+        card.innerHTML = `
+
+            <div class="small">
+                ${escapeHTML(item.period || "")}
+            </div>
+
+            <h3>
+                ${escapeHTML(item.designation || "Position")}
+            </h3>
+
+            <p>
+                ${escapeHTML(item.institution || "")}
+            </p>
+
+            <p style="margin-top:10px;">
+                ${escapeHTML(item.description || "")}
+            </p>
+
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+/* =========================================================
+   PUBLICATIONS
+========================================================= */
+
+function renderPublications(items){
+
+    const container =
+        document.getElementById("publicationList");
+
+    container.innerHTML = "";
+
+
+    if(items.length === 0){
+
+        container.innerHTML =
+            '<div class="empty">No publications added.</div>';
+
+        return;
+    }
+
+
+    items.forEach(item => {
+
+        const element =
+            document.createElement("div");
+
+        element.className =
+            "publication";
+
+
+        const link =
+            safeURL(item.link);
+
+
+        element.innerHTML = `
+
+            <div class="pub-year">
+                ${escapeHTML(item.year || "")}
+            </div>
+
+            <div>
+
+                <div class="pub-title">
+                    ${escapeHTML(item.title || "Publication")}
+                </div>
+
+                <div class="pub-authors">
+                    ${escapeHTML(item.authors || "")}
+                </div>
+
+                <span class="pub-type">
+                    ${escapeHTML(item.type || "Publication")}
+                </span>
+
+                ${
+                    link
+                    ? `
+                        <br>
+                        <a
+                            href="${escapeHTML(link)}"
+                            target="_blank"
+                            rel="noopener noreferrer">
+
+                            View Publication →
+
+                        </a>
+                      `
+                    : ""
+                }
+
+            </div>
+
+        `;
+
+        container.appendChild(element);
+
+    });
+
+}
+
+
+/* =========================================================
+   PATENTS
+========================================================= */
+
+function renderPatents(items){
+
+    const container =
+        document.getElementById("patentList");
+
+    container.innerHTML = "";
+
+
+    if(items.length === 0){
+
+        container.innerHTML =
+            '<div class="empty">No patents added.</div>';
+
+        return;
+    }
+
+
+    items.forEach(item => {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "data-card";
+
+
+        card.innerHTML = `
+
+            <div class="small">
+                ${escapeHTML(item.year || "")}
+            </div>
+
+            <h3>
+                ${escapeHTML(item.title || "Patent")}
+            </h3>
+
+            <p>
+                Patent No:
+                ${escapeHTML(item.number || "—")}
+            </p>
+
+            <p style="margin-top:8px;">
+                Status:
+                ${escapeHTML(item.status || "—")}
+            </p>
+
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+/* =========================================================
+   PROJECTS
+========================================================= */
+
+function renderProjects(items){
+
+    const container =
+        document.getElementById("projectList");
+
+    container.innerHTML = "";
+
+
+    if(items.length === 0){
+
+        container.innerHTML =
+            '<div class="empty">No research projects added.</div>';
+
+        return;
+    }
+
+
+    items.forEach(item => {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "data-card";
+
+
+        card.innerHTML = `
+
+            <div class="small">
+                ${escapeHTML(item.year || "")}
+            </div>
+
+            <h3>
+                ${escapeHTML(item.title || "Research Project")}
+            </h3>
+
+            <p>
+                ${escapeHTML(item.agency || "")}
+            </p>
+
+            <p style="margin-top:10px;">
+                ${escapeHTML(item.description || "")}
+            </p>
+
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+/* =========================================================
+   AWARDS
+========================================================= */
+
+function renderAwards(items){
+
+    const container =
+        document.getElementById("awardList");
+
+    container.innerHTML = "";
+
+
+    if(items.length === 0){
+
+        container.innerHTML =
+            '<div class="empty">No awards added.</div>';
+
+        return;
+    }
+
+
+    items.forEach(item => {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "data-card";
+
+
+        card.innerHTML = `
+
+            <div class="small">
+                ${escapeHTML(item.year || "")}
+            </div>
+
+            <h3>
+                ${escapeHTML(item.title || "Achievement")}
+            </h3>
+
+            <p>
+                ${escapeHTML(item.organization || "")}
+            </p>
+
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+/* =========================================================
+   EMPTY SECTIONS
+========================================================= */
+
+function renderEmptySections(){
+
+    document.getElementById("researchAreas").innerHTML =
+        '<div class="empty">Add research areas from the admin panel.</div>';
+
+    document.getElementById("journeyList").innerHTML =
+        '<div class="empty">Add academic journey from the admin panel.</div>';
+
+    document.getElementById("educationList").innerHTML =
+        '<div class="empty">Add education details from the admin panel.</div>';
+
+    document.getElementById("experienceList").innerHTML =
+        '<div class="empty">Add professional experience from the admin panel.</div>';
+
+    document.getElementById("publicationList").innerHTML =
+        '<div class="empty">Add publications from the admin panel.</div>';
+
+    document.getElementById("patentList").innerHTML =
+        '<div class="empty">Add patents from the admin panel.</div>';
+
+    document.getElementById("projectList").innerHTML =
+        '<div class="empty">Add research projects from the admin panel.</div>';
+
+    document.getElementById("awardList").innerHTML =
+        '<div class="empty">Add awards from the admin panel.</div>';
+
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+const darkModeBtn =
+    document.getElementById("darkModeBtn");
+
+
+function applyDarkMode(){
+
+    const dark =
+        localStorage.getItem(
+            "academicDarkMode"
+        ) === "true";
+
+    document.body.classList.toggle(
+        "dark",
+        dark
+    );
+
+}
+
+
+darkModeBtn.addEventListener(
+    "click",
+    function(){
+
+        const isDark =
+            document.body.classList.contains("dark");
+
+        localStorage.setItem(
+            "academicDarkMode",
+            String(!isDark)
+        );
+
+        applyDarkMode();
+
+    }
+);
+
+
+/* =========================================================
+   SECRET ADMIN LOGIN
+========================================================= */
+
+const secretAdmin =
+    document.querySelector(
+        ".secret-admin-trigger"
+    );
+
+
+secretAdmin.addEventListener(
+    "dblclick",
+    function(){
+
+        const password =
+            prompt("Enter Admin Password");
+
+
+        if(password === null){
+            return;
+        }
+
+
+        if(password === "123"){
+
+            window.location.href =
+                "professor-admin.html";
+
+        }else{
+
+            alert(
+                "Incorrect password.\nAccess denied."
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   STORAGE UPDATE
+========================================================= */
+
+/*
+    If admin page is opened in another browser tab,
+    index page can automatically update when storage changes.
+*/
+
+window.addEventListener(
+    "storage",
+    function(event){
+
+        if(
+            event.key === STORAGE_KEY ||
+            event.key === PHOTO_KEY
+        ){
+
+            loadProfile();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   FOOTER YEAR
+========================================================= */
+
+document.getElementById("footerYear")
+    .textContent =
+    new Date().getFullYear();
+
+
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
+
+applyDarkMode();
+
+loadProfile();
+
+</script>
+
+
+</body>
+</html>

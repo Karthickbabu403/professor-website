@@ -1,0 +1,3591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Professor Admin Panel</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+:root{
+    --navy:#071a2f;
+    --navy2:#0c2744;
+    --teal:#00a6a6;
+    --teal2:#18c7c7;
+
+    --white:#ffffff;
+    --light:#f4f8fb;
+    --border:#dbe5ec;
+
+    --text:#17212b;
+    --muted:#667789;
+
+    --danger:#d64545;
+
+    --shadow:0 12px 35px rgba(7,26,47,.09);
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--light);
+    color:var(--text);
+    line-height:1.5;
+}
+
+button,
+input,
+textarea,
+select{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.container{
+    width:min(1180px,92%);
+    margin:auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.admin-header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+
+    background:rgba(255,255,255,.96);
+
+    backdrop-filter:blur(15px);
+
+    border-bottom:1px solid var(--border);
+
+    box-shadow:0 4px 20px rgba(0,0,0,.04);
+}
+
+.header-inner{
+    min-height:76px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:20px;
+}
+
+.brand{
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+.logo{
+    width:46px;
+    height:46px;
+
+    border-radius:13px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--teal),
+            var(--navy)
+        );
+
+    color:white;
+
+    font-weight:800;
+}
+
+.brand-text{
+    display:flex;
+    flex-direction:column;
+}
+
+.brand-text strong{
+    color:var(--navy);
+    font-size:15px;
+}
+
+.brand-text span{
+    color:var(--muted);
+    font-size:11px;
+}
+
+.header-actions{
+    display:flex;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn{
+    border:0;
+
+    padding:11px 17px;
+
+    border-radius:9px;
+
+    font-weight:bold;
+
+    font-size:13px;
+
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+}
+
+.btn-primary{
+    background:var(--teal);
+
+    color:white;
+}
+
+.btn-primary:hover{
+    background:#078f8f;
+}
+
+.btn-dark{
+    background:var(--navy);
+
+    color:white;
+}
+
+.btn-light{
+    background:#edf3f7;
+
+    color:var(--navy);
+}
+
+.btn-danger{
+    background:#ffe9e9;
+
+    color:var(--danger);
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page{
+    padding:45px 0 80px;
+}
+
+.page-title{
+    margin-bottom:30px;
+}
+
+.page-title .kicker{
+    color:var(--teal);
+
+    font-size:12px;
+
+    text-transform:uppercase;
+
+    letter-spacing:2px;
+
+    font-weight:bold;
+}
+
+.page-title h1{
+    color:var(--navy);
+
+    font-size:34px;
+
+    margin-top:5px;
+}
+
+.page-title p{
+    color:var(--muted);
+
+    margin-top:7px;
+}
+
+
+/* =========================================================
+   FORM SECTION
+========================================================= */
+
+.form-section{
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:18px;
+
+    padding:30px;
+
+    margin-bottom:25px;
+
+    box-shadow:var(--shadow);
+}
+
+.section-heading{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    margin-bottom:25px;
+
+    padding-bottom:15px;
+
+    border-bottom:1px solid var(--border);
+}
+
+.section-heading h2{
+    color:var(--navy);
+
+    font-size:21px;
+}
+
+.section-heading p{
+    color:var(--muted);
+
+    font-size:13px;
+}
+
+
+/* =========================================================
+   FORM GRID
+========================================================= */
+
+.form-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:18px;
+}
+
+.form-group{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:7px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+label{
+    font-size:12px;
+
+    color:#526273;
+
+    font-weight:bold;
+}
+
+.required{
+    color:var(--danger);
+}
+
+input,
+textarea,
+select{
+    width:100%;
+
+    border:1px solid #ccd9e2;
+
+    border-radius:9px;
+
+    padding:12px 13px;
+
+    background:white;
+
+    color:var(--text);
+
+    outline:none;
+
+    font-size:14px;
+
+    transition:.2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    border-color:var(--teal);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(0,166,166,.10);
+}
+
+textarea{
+    min-height:130px;
+
+    resize:vertical;
+}
+
+
+/* =========================================================
+   PHOTO
+========================================================= */
+
+.photo-area{
+    display:grid;
+
+    grid-template-columns:150px 1fr;
+
+    gap:25px;
+
+    align-items:center;
+}
+
+.photo-preview{
+    width:145px;
+    height:145px;
+
+    object-fit:cover;
+
+    border-radius:50%;
+
+    background:#e7eef3;
+
+    border:5px solid #edf4f7;
+}
+
+.photo-note{
+    color:var(--muted);
+
+    font-size:13px;
+
+    margin-top:7px;
+}
+
+
+/* =========================================================
+   REPEATER
+========================================================= */
+
+.repeater{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+}
+
+.repeater-item{
+    border:1px solid var(--border);
+
+    border-radius:13px;
+
+    padding:20px;
+
+    background:#fbfdfe;
+
+    position:relative;
+}
+
+.item-number{
+    color:var(--teal);
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    margin-bottom:15px;
+}
+
+.remove-btn{
+    position:absolute;
+
+    right:15px;
+    top:15px;
+
+    border:0;
+
+    background:#ffeaea;
+
+    color:var(--danger);
+
+    padding:7px 10px;
+
+    border-radius:7px;
+
+    font-size:11px;
+
+    font-weight:bold;
+}
+
+
+/* =========================================================
+   ADD BUTTON
+========================================================= */
+
+.add-btn{
+    margin-top:15px;
+
+    border:1px dashed #9eb7c5;
+
+    background:#f4fafb;
+
+    color:#087979;
+
+    padding:10px 15px;
+
+    border-radius:8px;
+
+    font-weight:bold;
+
+    font-size:13px;
+}
+
+.add-btn:hover{
+    background:#e7f7f7;
+}
+
+
+/* =========================================================
+   ACTION BAR
+========================================================= */
+
+.save-bar{
+    position:sticky;
+
+    bottom:15px;
+
+    z-index:100;
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    box-shadow:0 10px 35px rgba(0,0,0,.12);
+
+    border-radius:15px;
+
+    padding:15px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    margin-top:25px;
+}
+
+.save-buttons{
+    display:flex;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+}
+
+.status{
+    color:#13805c;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+
+
+/* =========================================================
+   HINT
+========================================================= */
+
+.hint{
+    background:#eefafa;
+
+    border-left:4px solid var(--teal);
+
+    padding:13px 15px;
+
+    color:#356166;
+
+    font-size:13px;
+
+    margin-bottom:20px;
+
+    border-radius:7px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:750px){
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-group.full{
+        grid-column:auto;
+    }
+
+    .photo-area{
+        grid-template-columns:1fr;
+
+        text-align:center;
+    }
+
+    .photo-preview{
+        margin:auto;
+    }
+
+    .header-inner{
+        padding:12px 0;
+
+        align-items:flex-start;
+    }
+
+    .header-actions{
+        justify-content:flex-end;
+    }
+
+    .save-bar{
+        flex-direction:column;
+
+        align-items:flex-start;
+    }
+
+}
+
+@media(max-width:500px){
+
+    .form-section{
+        padding:20px;
+    }
+
+    .page-title h1{
+        font-size:28px;
+    }
+
+    .brand-text strong{
+        font-size:12px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="admin-header">
+
+    <div class="container header-inner">
+
+        <div class="brand">
+
+            <div class="logo">
+                PA
+            </div>
+
+            <div class="brand-text">
+
+                <strong>
+                    Professor Admin Panel
+                </strong>
+
+                <span>
+                    Academic Profile Management
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="header-actions">
+
+            <button
+                class="btn btn-light"
+                onclick="goToProfile()">
+
+                View Profile
+
+            </button>
+
+
+            <button
+                class="btn btn-danger"
+                onclick="clearAll()">
+
+                Clear Data
+
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="page">
+
+<div class="container">
+
+
+<!-- =====================================================
+     TITLE
+===================================================== -->
+
+<div class="page-title">
+
+    <div class="kicker">
+        Administration
+    </div>
+
+    <h1>
+        Professor Profile Management
+    </h1>
+
+    <p>
+        Enter and manage the professor's academic information.
+    </p>
+
+</div>
+
+
+
+<div class="hint">
+
+    Changes saved here will automatically be used by
+    <strong>index.html</strong>.
+
+</div>
+
+
+
+<!-- =====================================================
+     PROFESSOR DETAILS
+===================================================== -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+    <div>
+
+        <h2>
+            Professor Details
+        </h2>
+
+        <p>
+            Basic academic profile information
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+    Professor Name <span class="required">*</span>
+</label>
+
+<input
+    type="text"
+    id="name"
+    placeholder="Enter professor name">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+    Designation <span class="required">*</span>
+</label>
+
+<input
+    type="text"
+    id="designation"
+    placeholder="Professor / Associate Professor">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+    Department
+</label>
+
+<input
+    type="text"
+    id="department"
+    placeholder="Department of Computer Science">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+    College / University
+</label>
+
+<input
+    type="text"
+    id="college"
+    placeholder="College or University name">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+    Location
+</label>
+
+<input
+    type="text"
+    id="location"
+    placeholder="City, State, Country">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+    Highest Qualification
+</label>
+
+<input
+    type="text"
+    id="qualification"
+    placeholder="Ph.D., M.E., M.Tech., etc.">
+
+</div>
+
+
+<div class="form-group full">
+
+<label>
+    Biography / About Professor
+</label>
+
+<textarea
+    id="bio"
+    placeholder="Write a professional biography about the professor..."></textarea>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     PHOTO
+===================================================== -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+    <div>
+
+        <h2>
+            Professor Photo
+        </h2>
+
+        <p>
+            Upload profile photograph
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="photo-area">
+
+    <img
+        id="photoPreview"
+        class="photo-preview"
+        src=""
+        alt="Photo Preview">
+
+
+    <div>
+
+        <input
+            type="file"
+            id="photoInput"
+            accept="image/*">
+
+        <div class="photo-note">
+
+            Recommended: JPG or PNG.
+            Use a clear professional photograph.
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     ACADEMIC METRICS
+===================================================== -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+    <div>
+
+        <h2>
+            Academic Metrics
+        </h2>
+
+        <p>
+            Research impact and academic statistics
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+    Publications
+</label>
+
+<input
+    type="number"
+    id="publications"
+    min="0"
+    placeholder="0">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+    Citations
+</label>
+
+<input
+    type="number"
+    id="citations"
+    min="0"
+    placeholder="0">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+    h-index
+</label>
+
+<input
+    type="number"
+    id="hIndex"
+    min="0"
+    placeholder="0">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+    i10-index
+</label>
+
+<input
+    type="number"
+    id="i10Index"
+    min="0"
+    placeholder="0">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+    Patents
+</label>
+
+<input
+    type="number"
+    id="patents"
+    min="0"
+    placeholder="0">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+    Books / Chapters
+</label>
+
+<input
+    type="number"
+    id="books"
+    min="0"
+    placeholder="0">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+    Years of Experience
+</label>
+
+<input
+    type="number"
+    id="experienceYears"
+    min="0"
+    placeholder="0">
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     RESEARCH AREAS
+===================================================== -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+    <div>
+
+        <h2>
+            Research Interests
+        </h2>
+
+        <p>
+            Add major research areas
+        </p>
+
+    </div>
+
+</div>
+
+
+<div
+    id="researchRepeater"
+    class="repeater">
+</div>
+
+
+<button
+    type="button"
+    class="add-btn"
+    onclick="addResearch()">
+
+    + Add Research Area
+
+</button>
+
+</section>
+
+
+
+<!-- =====================================================
+     ACADEMIC JOURNEY
+===================================================== -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+    <div>
+
+        <h2>
+            Academic Journey
+        </h2>
+
+        <p>
+            Important career and academic milestones
+        </p>
+
+    </div>
+
+</div>
+
+
+<div
+    id="journeyRepeater"
+    class="repeater">
+</div>
+
+
+<button
+    type="button"
+    class="add-btn"
+    onclick="addJourney()">
+
+    + Add Journey
+
+</button>
+
+</section>
+
+
+
+<!-- =====================================================
+     EDUCATION
+===================================================== -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+    <div>
+
+        <h2>
+            Education
+        </h2>
+
+        <p>
+            Academic qualifications
+        </p>
+
+    </div>
+
+</div>
+
+
+<div
+    id="educationRepeater"
+    class="repeater">
+</div>
+
+
+<button
+    type="button"
+    class="add-btn"
+    onclick="addEducation()">
+
+    + Add Education
+
+</button>
+
+</section>
+
+
+
+<!-- =====================================================
+     EXPERIENCE
+===================================================== -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+    <div>
+
+        <h2>
+            Professional Experience
+        </h2>
+
+        <p>
+            Teaching, research and industry experience
+        </p>
+
+    </div>
+
+</div>
+
+
+<div
+    id="experienceRepeater"
+    class="repeater">
+</div>
+
+
+<button
+    type="button"
+    class="add-btn"
+    onclick="addExperience()">
+
+    + Add Experience
+
+</button>
+
+</section>
+
+
+
+<!-- =====================================================
+     PUBLICATIONS
+===================================================== -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+    <div>
+
+        <h2>
+            Publications
+        </h2>
+
+        <p>
+            Journals, conferences and other publications
+        </p>
+
+    </div>
+
+</div>
+
+
+<div
+    id="publicationRepeater"
+    class="repeater">
+</div>
+
+
+<button
+    type="button"
+    class="add-btn"
+    onclick="addPublication()">
+
+    + Add Publication
+
+</button>
+
+</section>
+
+
+
+<!-- =====================================================
+     PATENTS
+===================================================== -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+    <div>
+
+        <h2>
+            Patents
+        </h2>
+
+        <p>
+            Patent and intellectual property details
+        </p>
+
+    </div>
+
+</div>
+
+
+<div
+    id="patentRepeater"
+    class="repeater">
+</div>
+
+
+<button
+    type="button"
+    class="add-btn"
+    onclick="addPatent()">
+
+    + Add Patent
+
+</button>
+
+</section>
+
+
+
+<!-- =====================================================
+     PROJECTS
+===================================================== -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+    <div>
+
+        <h2>
+            Research Projects
+        </h2>
+
+        <p>
+            Funded and academic research projects
+        </p>
+
+    </div>
+
+</div>
+
+
+<div
+    id="projectRepeater"
+    class="repeater">
+</div>
+
+
+<button
+    type="button"
+    class="add-btn"
+    onclick="addProject()">
+
+    + Add Research Project
+
+</button>
+
+</section>
+
+
+
+<!-- =====================================================
+     AWARDS
+===================================================== -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+    <div>
+
+        <h2>
+            Awards & Achievements
+        </h2>
+
+        <p>
+            Awards, recognition and achievements
+        </p>
+
+    </div>
+
+</div>
+
+
+<div
+    id="awardRepeater"
+    class="repeater">
+</div>
+
+
+<button
+    type="button"
+    class="add-btn"
+    onclick="addAward()">
+
+    + Add Award
+
+</button>
+
+</section>
+
+
+
+<!-- =====================================================
+     ACADEMIC IDENTIFIERS
+===================================================== -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+    <div>
+
+        <h2>
+            Academic Identifiers
+        </h2>
+
+        <p>
+            Researcher identification profiles
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+    VIDWAN
+</label>
+
+<input
+    type="text"
+    id="vidwan"
+    placeholder="VIDWAN ID">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+    ORCID
+</label>
+
+<input
+    type="text"
+    id="orcid"
+    placeholder="ORCID ID">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+    Google Scholar
+</label>
+
+<input
+    type="text"
+    id="googleScholar"
+    placeholder="Google Scholar profile">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+    Scopus
+</label>
+
+<input
+    type="text"
+    id="scopus"
+    placeholder="Scopus Author ID">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+    Researcher ID
+</label>
+
+<input
+    type="text"
+    id="researcherId"
+    placeholder="Researcher ID">
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CONTACT
+===================================================== -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+    <div>
+
+        <h2>
+            Contact Information
+        </h2>
+
+        <p>
+            Public contact details
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+    Email
+</label>
+
+<input
+    type="email"
+    id="email"
+    placeholder="professor@example.com">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+    Phone
+</label>
+
+<input
+    type="text"
+    id="phone"
+    placeholder="+91 XXXXX XXXXX">
+
+</div>
+
+
+<div class="form-group full">
+
+<label>
+    Address
+</label>
+
+<textarea
+    id="address"
+    placeholder="College / University address"></textarea>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     SAVE BAR
+===================================================== -->
+
+<div class="save-bar">
+
+    <div
+        id="status"
+        class="status">
+
+    </div>
+
+
+    <div class="save-buttons">
+
+        <button
+            class="btn btn-light"
+            onclick="goToProfile()">
+
+            View Profile
+
+        </button>
+
+
+        <button
+            class="btn btn-primary"
+            onclick="saveAll()">
+
+            Save Profile
+
+        </button>
+
+
+        <button
+            class="btn btn-dark"
+            onclick="saveAndView()">
+
+            Save & View Profile
+
+        </button>
+
+    </div>
+
+</div>
+
+
+</div>
+
+</main>
+
+
+
+<script>
+
+/* =========================================================
+   STORAGE KEYS
+========================================================= */
+
+const STORAGE_KEY =
+    "professorProfile";
+
+const PHOTO_KEY =
+    "professorPhoto";
+
+
+/* =========================================================
+   HELPER
+========================================================= */
+
+function escapeHTML(value){
+
+    if(value === null || value === undefined){
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+/* =========================================================
+   PHOTO
+========================================================= */
+
+document
+    .getElementById("photoInput")
+    .addEventListener(
+        "change",
+        function(){
+
+            const file =
+                this.files[0];
+
+            if(!file){
+                return;
+            }
+
+            if(!file.type.startsWith("image/")){
+
+                alert(
+                    "Please select an image file."
+                );
+
+                return;
+            }
+
+            const reader =
+                new FileReader();
+
+            reader.onload =
+                function(event){
+
+                    localStorage.setItem(
+                        PHOTO_KEY,
+                        event.target.result
+                    );
+
+                    document
+                        .getElementById(
+                            "photoPreview"
+                        )
+                        .src =
+                        event.target.result;
+
+                };
+
+            reader.readAsDataURL(file);
+
+        }
+    );
+
+
+/* =========================================================
+   DEFAULT PHOTO
+========================================================= */
+
+function showDefaultPhoto(){
+
+    const photo =
+        localStorage.getItem(
+            PHOTO_KEY
+        );
+
+    if(photo){
+
+        document
+            .getElementById("photoPreview")
+            .src = photo;
+
+    }else{
+
+        document
+            .getElementById("photoPreview")
+            .src =
+            "data:image/svg+xml;charset=UTF-8," +
+            encodeURIComponent(`
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="300"
+                     height="300">
+
+                    <rect width="300"
+                          height="300"
+                          fill="#dce8ef"/>
+
+                    <circle cx="150"
+                            cy="110"
+                            r="55"
+                            fill="#9eb2bf"/>
+
+                    <path d="
+                        M70 270
+                        C80 195,
+                        115 175,
+                        150 175
+                        C185 175,
+                        220 195,
+                        230 270
+                        Z"
+                        fill="#8299a8"/>
+
+                </svg>
+            `);
+
+    }
+
+}
+
+
+/* =========================================================
+   RESEARCH
+========================================================= */
+
+function addResearch(value=""){
+
+    const container =
+        document.getElementById(
+            "researchRepeater"
+        );
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "repeater-item";
+
+    item.innerHTML = `
+
+        <div class="item-number">
+            Research Area
+        </div>
+
+        <input
+            type="text"
+            class="research-input"
+            placeholder="Example: Artificial Intelligence"
+            value="${escapeHTML(value)}">
+
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="this.parentElement.remove()">
+
+            Remove
+
+        </button>
+
+    `;
+
+    container.appendChild(item);
+
+}
+
+
+/* =========================================================
+   JOURNEY
+========================================================= */
+
+function addJourney(
+    year="",
+    title="",
+    description=""
+){
+
+    const container =
+        document.getElementById(
+            "journeyRepeater"
+        );
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "repeater-item";
+
+    item.innerHTML = `
+
+        <div class="item-number">
+            Academic Journey
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    Year
+                </label>
+
+                <input
+                    type="text"
+                    class="journey-year"
+                    placeholder="2020"
+                    value="${escapeHTML(year)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Title
+                </label>
+
+                <input
+                    type="text"
+                    class="journey-title"
+                    placeholder="Joined as Professor"
+                    value="${escapeHTML(title)}">
+
+            </div>
+
+            <div class="form-group full">
+
+                <label>
+                    Description
+                </label>
+
+                <textarea
+                    class="journey-description"
+                    placeholder="Describe this milestone...">${escapeHTML(description)}</textarea>
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="this.parentElement.remove()">
+
+            Remove
+
+        </button>
+
+    `;
+
+    container.appendChild(item);
+
+}
+
+
+/* =========================================================
+   EDUCATION
+========================================================= */
+
+function addEducation(
+    degree="",
+    institution="",
+    year="",
+    specialization=""
+){
+
+    const container =
+        document.getElementById(
+            "educationRepeater"
+        );
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "repeater-item";
+
+    item.innerHTML = `
+
+        <div class="item-number">
+            Education
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    Degree
+                </label>
+
+                <input
+                    type="text"
+                    class="education-degree"
+                    placeholder="Ph.D."
+                    value="${escapeHTML(degree)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Institution
+                </label>
+
+                <input
+                    type="text"
+                    class="education-institution"
+                    placeholder="University Name"
+                    value="${escapeHTML(institution)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Year
+                </label>
+
+                <input
+                    type="text"
+                    class="education-year"
+                    placeholder="2020"
+                    value="${escapeHTML(year)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Specialization
+                </label>
+
+                <input
+                    type="text"
+                    class="education-specialization"
+                    placeholder="Computer Science"
+                    value="${escapeHTML(specialization)}">
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="this.parentElement.remove()">
+
+            Remove
+
+        </button>
+
+    `;
+
+    container.appendChild(item);
+
+}
+
+
+/* =========================================================
+   EXPERIENCE
+========================================================= */
+
+function addExperience(
+    designation="",
+    institution="",
+    period="",
+    description=""
+){
+
+    const container =
+        document.getElementById(
+            "experienceRepeater"
+        );
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "repeater-item";
+
+    item.innerHTML = `
+
+        <div class="item-number">
+            Professional Experience
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    Designation
+                </label>
+
+                <input
+                    type="text"
+                    class="experience-designation"
+                    placeholder="Professor"
+                    value="${escapeHTML(designation)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Institution
+                </label>
+
+                <input
+                    type="text"
+                    class="experience-institution"
+                    placeholder="College / University"
+                    value="${escapeHTML(institution)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Period
+                </label>
+
+                <input
+                    type="text"
+                    class="experience-period"
+                    placeholder="2020 - Present"
+                    value="${escapeHTML(period)}">
+
+            </div>
+
+            <div class="form-group full">
+
+                <label>
+                    Description
+                </label>
+
+                <textarea
+                    class="experience-description"
+                    placeholder="Describe responsibilities...">${escapeHTML(description)}</textarea>
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="this.parentElement.remove()">
+
+            Remove
+
+        </button>
+
+    `;
+
+    container.appendChild(item);
+
+}
+
+
+/* =========================================================
+   PUBLICATIONS
+========================================================= */
+
+function addPublication(
+    title="",
+    authors="",
+    year="",
+    type="",
+    link=""
+){
+
+    const container =
+        document.getElementById(
+            "publicationRepeater"
+        );
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "repeater-item";
+
+    item.innerHTML = `
+
+        <div class="item-number">
+            Publication
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group full">
+
+                <label>
+                    Publication Title
+                </label>
+
+                <input
+                    type="text"
+                    class="publication-title"
+                    placeholder="Research paper title"
+                    value="${escapeHTML(title)}">
+
+            </div>
+
+            <div class="form-group full">
+
+                <label>
+                    Authors
+                </label>
+
+                <input
+                    type="text"
+                    class="publication-authors"
+                    placeholder="Author names"
+                    value="${escapeHTML(authors)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Year
+                </label>
+
+                <input
+                    type="text"
+                    class="publication-year"
+                    placeholder="2026"
+                    value="${escapeHTML(year)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Type
+                </label>
+
+                <select class="publication-type">
+
+                    <option value="">
+                        Select Type
+                    </option>
+
+                    <option value="Journal"
+                        ${type==="Journal" ? "selected" : ""}>
+                        Journal
+                    </option>
+
+                    <option value="Conference"
+                        ${type==="Conference" ? "selected" : ""}>
+                        Conference
+                    </option>
+
+                    <option value="Book Chapter"
+                        ${type==="Book Chapter" ? "selected" : ""}>
+                        Book Chapter
+                    </option>
+
+                    <option value="Book"
+                        ${type==="Book" ? "selected" : ""}>
+                        Book
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group full">
+
+                <label>
+                    Publication Link
+                </label>
+
+                <input
+                    type="url"
+                    class="publication-link"
+                    placeholder="https://..."
+                    value="${escapeHTML(link)}">
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="this.parentElement.remove()">
+
+            Remove
+
+        </button>
+
+    `;
+
+    container.appendChild(item);
+
+}
+
+
+/* =========================================================
+   PATENTS
+========================================================= */
+
+function addPatent(
+    title="",
+    number="",
+    year="",
+    status=""
+){
+
+    const container =
+        document.getElementById(
+            "patentRepeater"
+        );
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "repeater-item";
+
+    item.innerHTML = `
+
+        <div class="item-number">
+            Patent
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group full">
+
+                <label>
+                    Patent Title
+                </label>
+
+                <input
+                    type="text"
+                    class="patent-title"
+                    placeholder="Patent title"
+                    value="${escapeHTML(title)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Patent Number
+                </label>
+
+                <input
+                    type="text"
+                    class="patent-number"
+                    placeholder="Patent number"
+                    value="${escapeHTML(number)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Year
+                </label>
+
+                <input
+                    type="text"
+                    class="patent-year"
+                    placeholder="2026"
+                    value="${escapeHTML(year)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Status
+                </label>
+
+                <select class="patent-status">
+
+                    <option value="">
+                        Select Status
+                    </option>
+
+                    <option value="Filed"
+                        ${status==="Filed" ? "selected" : ""}>
+                        Filed
+                    </option>
+
+                    <option value="Published"
+                        ${status==="Published" ? "selected" : ""}>
+                        Published
+                    </option>
+
+                    <option value="Granted"
+                        ${status==="Granted" ? "selected" : ""}>
+                        Granted
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="this.parentElement.remove()">
+
+            Remove
+
+        </button>
+
+    `;
+
+    container.appendChild(item);
+
+}
+
+
+/* =========================================================
+   PROJECTS
+========================================================= */
+
+function addProject(
+    title="",
+    agency="",
+    year="",
+    description=""
+){
+
+    const container =
+        document.getElementById(
+            "projectRepeater"
+        );
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "repeater-item";
+
+    item.innerHTML = `
+
+        <div class="item-number">
+            Research Project
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group full">
+
+                <label>
+                    Project Title
+                </label>
+
+                <input
+                    type="text"
+                    class="project-title"
+                    placeholder="Project title"
+                    value="${escapeHTML(title)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Funding Agency
+                </label>
+
+                <input
+                    type="text"
+                    class="project-agency"
+                    placeholder="Funding agency"
+                    value="${escapeHTML(agency)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Year
+                </label>
+
+                <input
+                    type="text"
+                    class="project-year"
+                    placeholder="2026"
+                    value="${escapeHTML(year)}">
+
+            </div>
+
+            <div class="form-group full">
+
+                <label>
+                    Description
+                </label>
+
+                <textarea
+                    class="project-description"
+                    placeholder="Project description...">${escapeHTML(description)}</textarea>
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="this.parentElement.remove()">
+
+            Remove
+
+        </button>
+
+    `;
+
+    container.appendChild(item);
+
+}
+
+
+/* =========================================================
+   AWARDS
+========================================================= */
+
+function addAward(
+    title="",
+    organization="",
+    year=""
+){
+
+    const container =
+        document.getElementById(
+            "awardRepeater"
+        );
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "repeater-item";
+
+    item.innerHTML = `
+
+        <div class="item-number">
+            Award / Achievement
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group full">
+
+                <label>
+                    Award / Achievement
+                </label>
+
+                <input
+                    type="text"
+                    class="award-title"
+                    placeholder="Award title"
+                    value="${escapeHTML(title)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Organization
+                </label>
+
+                <input
+                    type="text"
+                    class="award-organization"
+                    placeholder="Organization"
+                    value="${escapeHTML(organization)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Year
+                </label>
+
+                <input
+                    type="text"
+                    class="award-year"
+                    placeholder="2026"
+                    value="${escapeHTML(year)}">
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="this.parentElement.remove()">
+
+            Remove
+
+        </button>
+
+    `;
+
+    container.appendChild(item);
+
+}
+
+
+/* =========================================================
+   COLLECT RESEARCH
+========================================================= */
+
+function collectResearch(){
+
+    return [
+        ...document.querySelectorAll(
+            ".research-input"
+        )
+    ]
+    .map(input => input.value.trim())
+    .filter(value => value !== "");
+
+}
+
+
+/* =========================================================
+   COLLECT JOURNEY
+========================================================= */
+
+function collectJourney(){
+
+    return [
+        ...document.querySelectorAll(
+            "#journeyRepeater .repeater-item"
+        )
+    ]
+    .map(item => {
+
+        return {
+
+            year:
+                item.querySelector(
+                    ".journey-year"
+                ).value.trim(),
+
+            title:
+                item.querySelector(
+                    ".journey-title"
+                ).value.trim(),
+
+            description:
+                item.querySelector(
+                    ".journey-description"
+                ).value.trim()
+
+        };
+
+    });
+
+}
+
+
+/* =========================================================
+   COLLECT EDUCATION
+========================================================= */
+
+function collectEducation(){
+
+    return [
+        ...document.querySelectorAll(
+            "#educationRepeater .repeater-item"
+        )
+    ]
+    .map(item => {
+
+        return {
+
+            degree:
+                item.querySelector(
+                    ".education-degree"
+                ).value.trim(),
+
+            institution:
+                item.querySelector(
+                    ".education-institution"
+                ).value.trim(),
+
+            year:
+                item.querySelector(
+                    ".education-year"
+                ).value.trim(),
+
+            specialization:
+                item.querySelector(
+                    ".education-specialization"
+                ).value.trim()
+
+        };
+
+    });
+
+}
+
+
+/* =========================================================
+   COLLECT EXPERIENCE
+========================================================= */
+
+function collectExperience(){
+
+    return [
+        ...document.querySelectorAll(
+            "#experienceRepeater .repeater-item"
+        )
+    ]
+    .map(item => {
+
+        return {
+
+            designation:
+                item.querySelector(
+                    ".experience-designation"
+                ).value.trim(),
+
+            institution:
+                item.querySelector(
+                    ".experience-institution"
+                ).value.trim(),
+
+            period:
+                item.querySelector(
+                    ".experience-period"
+                ).value.trim(),
+
+            description:
+                item.querySelector(
+                    ".experience-description"
+                ).value.trim()
+
+        };
+
+    });
+
+}
+
+
+/* =========================================================
+   COLLECT PUBLICATIONS
+========================================================= */
+
+function collectPublications(){
+
+    return [
+        ...document.querySelectorAll(
+            "#publicationRepeater .repeater-item"
+        )
+    ]
+    .map(item => {
+
+        return {
+
+            title:
+                item.querySelector(
+                    ".publication-title"
+                ).value.trim(),
+
+            authors:
+                item.querySelector(
+                    ".publication-authors"
+                ).value.trim(),
+
+            year:
+                item.querySelector(
+                    ".publication-year"
+                ).value.trim(),
+
+            type:
+                item.querySelector(
+                    ".publication-type"
+                ).value,
+
+            link:
+                item.querySelector(
+                    ".publication-link"
+                ).value.trim()
+
+        };
+
+    });
+
+}
+
+
+/* =========================================================
+   COLLECT PATENTS
+========================================================= */
+
+function collectPatents(){
+
+    return [
+        ...document.querySelectorAll(
+            "#patentRepeater .repeater-item"
+        )
+    ]
+    .map(item => {
+
+        return {
+
+            title:
+                item.querySelector(
+                    ".patent-title"
+                ).value.trim(),
+
+            number:
+                item.querySelector(
+                    ".patent-number"
+                ).value.trim(),
+
+            year:
+                item.querySelector(
+                    ".patent-year"
+                ).value.trim(),
+
+            status:
+                item.querySelector(
+                    ".patent-status"
+                ).value
+
+        };
+
+    });
+
+}
+
+
+/* =========================================================
+   COLLECT PROJECTS
+========================================================= */
+
+function collectProjects(){
+
+    return [
+        ...document.querySelectorAll(
+            "#projectRepeater .repeater-item"
+        )
+    ]
+    .map(item => {
+
+        return {
+
+            title:
+                item.querySelector(
+                    ".project-title"
+                ).value.trim(),
+
+            agency:
+                item.querySelector(
+                    ".project-agency"
+                ).value.trim(),
+
+            year:
+                item.querySelector(
+                    ".project-year"
+                ).value.trim(),
+
+            description:
+                item.querySelector(
+                    ".project-description"
+                ).value.trim()
+
+        };
+
+    });
+
+}
+
+
+/* =========================================================
+   COLLECT AWARDS
+========================================================= */
+
+function collectAwards(){
+
+    return [
+        ...document.querySelectorAll(
+            "#awardRepeater .repeater-item"
+        )
+    ]
+    .map(item => {
+
+        return {
+
+            title:
+                item.querySelector(
+                    ".award-title"
+                ).value.trim(),
+
+            organization:
+                item.querySelector(
+                    ".award-organization"
+                ).value.trim(),
+
+            year:
+                item.querySelector(
+                    ".award-year"
+                ).value.trim()
+
+        };
+
+    });
+
+}
+
+
+/* =========================================================
+   SAVE PROFILE
+========================================================= */
+
+function saveAll(){
+
+    const name =
+        document
+        .getElementById("name")
+        .value.trim();
+
+
+    if(!name){
+
+        alert(
+            "Please enter Professor Name."
+        );
+
+        document
+            .getElementById("name")
+            .focus();
+
+        return false;
+
+    }
+
+
+    const profile = {
+
+        name:
+
+            name,
+
+        designation:
+
+            document
+            .getElementById("designation")
+            .value.trim(),
+
+        department:
+
+            document
+            .getElementById("department")
+            .value.trim(),
+
+        college:
+
+            document
+            .getElementById("college")
+            .value.trim(),
+
+        location:
+
+            document
+            .getElementById("location")
+            .value.trim(),
+
+        qualification:
+
+            document
+            .getElementById("qualification")
+            .value.trim(),
+
+        bio:
+
+            document
+            .getElementById("bio")
+            .value.trim(),
+
+
+        metrics:{
+
+            publications:
+
+                document
+                .getElementById("publications")
+                .value || "0",
+
+            citations:
+
+                document
+                .getElementById("citations")
+                .value || "0",
+
+            hIndex:
+
+                document
+                .getElementById("hIndex")
+                .value || "0",
+
+            i10Index:
+
+                document
+                .getElementById("i10Index")
+                .value || "0",
+
+            patents:
+
+                document
+                .getElementById("patents")
+                .value || "0",
+
+            books:
+
+                document
+                .getElementById("books")
+                .value || "0",
+
+            experienceYears:
+
+                document
+                .getElementById("experienceYears")
+                .value || "0"
+
+        },
+
+
+        researchAreas:
+
+            collectResearch(),
+
+
+        journey:
+
+            collectJourney(),
+
+
+        education:
+
+            collectEducation(),
+
+
+        experience:
+
+            collectExperience(),
+
+
+        publications:
+
+            collectPublications(),
+
+
+        patents:
+
+            collectPatents(),
+
+
+        projects:
+
+            collectProjects(),
+
+
+        awards:
+
+            collectAwards(),
+
+
+        identifiers:{
+
+            vidwan:
+
+                document
+                .getElementById("vidwan")
+                .value.trim(),
+
+            orcid:
+
+                document
+                .getElementById("orcid")
+                .value.trim(),
+
+            googleScholar:
+
+                document
+                .getElementById("googleScholar")
+                .value.trim(),
+
+            scopus:
+
+                document
+                .getElementById("scopus")
+                .value.trim(),
+
+            researcherId:
+
+                document
+                .getElementById("researcherId")
+                .value.trim()
+
+        },
+
+
+        contact:{
+
+            email:
+
+                document
+                .getElementById("email")
+                .value.trim(),
+
+            phone:
+
+                document
+                .getElementById("phone")
+                .value.trim(),
+
+            address:
+
+                document
+                .getElementById("address")
+                .value.trim()
+
+        }
+
+    };
+
+
+    try{
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(profile)
+        );
+
+
+        document
+            .getElementById("status")
+            .textContent =
+            "✓ Profile saved successfully";
+
+
+        return true;
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "Unable to save profile. " +
+            "The browser storage may be full."
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   SAVE & VIEW
+========================================================= */
+
+function saveAndView(){
+
+    if(saveAll()){
+
+        setTimeout(
+            function(){
+
+                window.location.href =
+                    "index.html";
+
+            },
+            400
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   VIEW PROFILE
+========================================================= */
+
+function goToProfile(){
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =========================================================
+   LOAD EXISTING DATA
+========================================================= */
+
+function loadAll(){
+
+    showDefaultPhoto();
+
+
+    const saved =
+        localStorage.getItem(
+            STORAGE_KEY
+        );
+
+
+    if(!saved){
+
+        /*
+            IMPORTANT:
+            No default input data is inserted.
+        */
+
+        return;
+
+    }
+
+
+    let data;
+
+    try{
+
+        data =
+            JSON.parse(saved);
+
+    }catch(error){
+
+        console.error(
+            "Invalid saved data",
+            error
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       BASIC
+    ===================================================== */
+
+    setValue(
+        "name",
+        data.name
+    );
+
+    setValue(
+        "designation",
+        data.designation
+    );
+
+    setValue(
+        "department",
+        data.department
+    );
+
+    setValue(
+        "college",
+        data.college
+    );
+
+    setValue(
+        "location",
+        data.location
+    );
+
+    setValue(
+        "qualification",
+        data.qualification
+    );
+
+    setValue(
+        "bio",
+        data.bio
+    );
+
+
+    /* =====================================================
+       METRICS
+    ===================================================== */
+
+    const metrics =
+        data.metrics || {};
+
+
+    setValue(
+        "publications",
+        metrics.publications
+    );
+
+    setValue(
+        "citations",
+        metrics.citations
+    );
+
+    setValue(
+        "hIndex",
+        metrics.hIndex
+    );
+
+    setValue(
+        "i10Index",
+        metrics.i10Index
+    );
+
+    setValue(
+        "patents",
+        metrics.patents
+    );
+
+    setValue(
+        "books",
+        metrics.books
+    );
+
+    setValue(
+        "experienceYears",
+        metrics.experienceYears
+    );
+
+
+    /* =====================================================
+       RESEARCH
+    ===================================================== */
+
+    const researchContainer =
+        document.getElementById(
+            "researchRepeater"
+        );
+
+    researchContainer.innerHTML = "";
+
+
+    if(
+        Array.isArray(data.researchAreas)
+    ){
+
+        data.researchAreas.forEach(
+            area => addResearch(area)
+        );
+
+    }
+
+
+    /* =====================================================
+       JOURNEY
+    ===================================================== */
+
+    const journeyContainer =
+        document.getElementById(
+            "journeyRepeater"
+        );
+
+    journeyContainer.innerHTML = "";
+
+
+    if(Array.isArray(data.journey)){
+
+        data.journey.forEach(item => {
+
+            addJourney(
+                item.year || "",
+                item.title || "",
+                item.description || ""
+            );
+
+        });
+
+    }
+
+
+    /* =====================================================
+       EDUCATION
+    ===================================================== */
+
+    const educationContainer =
+        document.getElementById(
+            "educationRepeater"
+        );
+
+    educationContainer.innerHTML = "";
+
+
+    if(Array.isArray(data.education)){
+
+        data.education.forEach(item => {
+
+            addEducation(
+                item.degree || "",
+                item.institution || "",
+                item.year || "",
+                item.specialization || ""
+            );
+
+        });
+
+    }
+
+
+    /* =====================================================
+       EXPERIENCE
+    ===================================================== */
+
+    const experienceContainer =
+        document.getElementById(
+            "experienceRepeater"
+        );
+
+    experienceContainer.innerHTML = "";
+
+
+    if(Array.isArray(data.experience)){
+
+        data.experience.forEach(item => {
+
+            addExperience(
+                item.designation || "",
+                item.institution || "",
+                item.period || "",
+                item.description || ""
+            );
+
+        });
+
+    }
+
+
+    /* =====================================================
+       PUBLICATIONS
+    ===================================================== */
+
+    const publicationContainer =
+        document.getElementById(
+            "publicationRepeater"
+        );
+
+    publicationContainer.innerHTML = "";
+
+
+    if(Array.isArray(data.publications)){
+
+        data.publications.forEach(item => {
+
+            addPublication(
+                item.title || "",
+                item.authors || "",
+                item.year || "",
+                item.type || "",
+                item.link || ""
+            );
+
+        });
+
+    }
+
+
+    /* =====================================================
+       PATENTS
+    ===================================================== */
+
+    const patentContainer =
+        document.getElementById(
+            "patentRepeater"
+        );
+
+    patentContainer.innerHTML = "";
+
+
+    if(Array.isArray(data.patents)){
+
+        data.patents.forEach(item => {
+
+            addPatent(
+                item.title || "",
+                item.number || "",
+                item.year || "",
+                item.status || ""
+            );
+
+        });
+
+    }
+
+
+    /* =====================================================
+       PROJECTS
+    ===================================================== */
+
+    const projectContainer =
+        document.getElementById(
+            "projectRepeater"
+        );
+
+    projectContainer.innerHTML = "";
+
+
+    if(Array.isArray(data.projects)){
+
+        data.projects.forEach(item => {
+
+            addProject(
+                item.title || "",
+                item.agency || "",
+                item.year || "",
+                item.description || ""
+            );
+
+        });
+
+    }
+
+
+    /* =====================================================
+       AWARDS
+    ===================================================== */
+
+    const awardContainer =
+        document.getElementById(
+            "awardRepeater"
+        );
+
+    awardContainer.innerHTML = "";
+
+
+    if(Array.isArray(data.awards)){
+
+        data.awards.forEach(item => {
+
+            addAward(
+                item.title || "",
+                item.organization || "",
+                item.year || ""
+            );
+
+        });
+
+    }
+
+
+    /* =====================================================
+       IDENTIFIERS
+    ===================================================== */
+
+    const identifiers =
+        data.identifiers || {};
+
+
+    setValue(
+        "vidwan",
+        identifiers.vidwan
+    );
+
+    setValue(
+        "orcid",
+        identifiers.orcid
+    );
+
+    setValue(
+        "googleScholar",
+        identifiers.googleScholar
+    );
+
+    setValue(
+        "scopus",
+        identifiers.scopus
+    );
+
+    setValue(
+        "researcherId",
+        identifiers.researcherId
+    );
+
+
+    /* =====================================================
+       CONTACT
+    ===================================================== */
+
+    const contact =
+        data.contact || {};
+
+
+    setValue(
+        "email",
+        contact.email
+    );
+
+    setValue(
+        "phone",
+        contact.phone
+    );
+
+    setValue(
+        "address",
+        contact.address
+    );
+
+}
+
+
+/* =========================================================
+   SET VALUE
+========================================================= */
+
+function setValue(id,value){
+
+    const element =
+        document.getElementById(id);
+
+    if(!element) return;
+
+    element.value =
+        value === undefined ||
+        value === null
+        ? ""
+        : value;
+
+}
+
+
+/* =========================================================
+   CLEAR ALL
+========================================================= */
+
+function clearAll(){
+
+    const confirmDelete =
+        confirm(
+            "Are you sure you want to delete all professor profile data?"
+        );
+
+
+    if(!confirmDelete){
+        return;
+    }
+
+
+    localStorage.removeItem(
+        STORAGE_KEY
+    );
+
+    localStorage.removeItem(
+        PHOTO_KEY
+    );
+
+
+    location.reload();
+
+}
+
+
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
+
+loadAll();
+
+</script>
+
+
+</body>
+</html>
