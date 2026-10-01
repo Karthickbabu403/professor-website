@@ -1950,10 +1950,13 @@ function openAdminLogin(event){
 const SUPABASE_URL = "https://fumqtdhinkxvaytamkog.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_AD5a082KlCS3rzQfh-EQcA_XxJjRZlx";
 
-const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-);
+const supabaseClient =
+    window.supabase && typeof window.supabase.createClient === "function"
+        ? window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_PUBLISHABLE_KEY
+          )
+        : null;
 
 const PROFILE_ROW_ID = 1;
 
@@ -1997,10 +2000,123 @@ function safeURL(url){
 
 
 /* =========================================================
+   STATUS / ERROR HELPERS
+========================================================= */
+
+function showSupabaseError(message){
+
+    console.error(message);
+
+    let box = document.getElementById("supabaseStatus");
+
+    if(!box){
+        box = document.createElement("div");
+        box.id = "supabaseStatus";
+        box.style.cssText = `
+            position:fixed;
+            left:20px;
+            right:20px;
+            bottom:20px;
+            z-index:99999;
+            padding:14px 18px;
+            border-radius:12px;
+            background:#fff4e5;
+            color:#7a3d00;
+            border:1px solid #f0c58a;
+            box-shadow:0 10px 30px rgba(0,0,0,.15);
+            font:600 14px/1.5 Arial,sans-serif;
+        `;
+        document.body.appendChild(box);
+    }
+
+    box.textContent = message;
+}
+
+
+function hideSupabaseError(){
+    const box = document.getElementById("supabaseStatus");
+    if(box){
+        box.remove();
+    }
+}
+
+
+/* =========================================================
+   EMPTY / FALLBACK RENDERING
+========================================================= */
+
+function renderEmptySections(){
+
+    const defaults = {
+        professorName: "Professor Name",
+        professorDesignation: "Professor / Associate Professor",
+        professorDepartment: "Department of Computer Science",
+        professorCollege: "College / University",
+        professorLocation: "📍 Location",
+        professorQualification: "—",
+        professorBio: "Academic profile information will appear here.",
+        aboutDepartment: "—",
+        aboutCollege: "—",
+        aboutLocation: "—",
+        metricPublications: "0",
+        metricCitations: "0",
+        metricHIndex: "0",
+        metricI10: "0",
+        metricPatents: "0",
+        metricBooks: "0",
+        metricExperience: "0",
+        contactEmail: "—",
+        contactPhone: "—",
+        contactAddress: "—"
+    };
+
+    Object.entries(defaults).forEach(([id,value]) => {
+        const el = document.getElementById(id);
+        if(el) el.textContent = value;
+    });
+
+    const photo = document.getElementById("profilePhoto");
+    if(photo && !photo.src){
+        photo.removeAttribute("src");
+    }
+
+    const emptyMessages = {
+        researchAreas: "No research areas added.",
+        journeyList: "No academic journey added.",
+        educationList: "No academic qualifications added.",
+        experienceList: "No professional experience added.",
+        publicationList: "No publications added.",
+        patentList: "No patents added.",
+        projectList: "No research projects added.",
+        awardList: "No awards added."
+    };
+
+    Object.entries(emptyMessages).forEach(([id,message]) => {
+        const container = document.getElementById(id);
+        if(container){
+            container.innerHTML = `<div class="empty">${escapeHTML(message)}</div>`;
+        }
+    });
+
+    ["vidwan","orcid","googleScholar","scopus","researcherId","irins","openAlex"].forEach(id => {
+        setIdentifier(id,"—");
+    });
+}
+
+
+/* =========================================================
    LOAD PROFILE
 ========================================================= */
 
 async function loadProfile(){
+
+    if(!supabaseClient){
+        showSupabaseError(
+            "Supabase JavaScript library could not be loaded. Please refresh the page and check the internet connection."
+        );
+        renderEmptySections();
+        return;
+    }
 
     let data = null;
     let photoData = null;
@@ -2024,7 +2140,13 @@ async function loadProfile(){
 
     }catch(error){
 
-        console.error("Unable to load profile from Supabase:", error);
+        const message = error && error.message
+            ? error.message
+            : "Unknown Supabase error.";
+
+        showSupabaseError(
+            "Supabase profile loading failed: " + message
+        );
 
         renderEmptySections();
 
@@ -2037,10 +2159,16 @@ async function loadProfile(){
         document.title =
             "Professor Academic Profile";
 
+        showSupabaseError(
+            "No professor profile row was returned from Supabase. Please check that professor_profile has a row with id = 1."
+        );
+
         renderEmptySections();
 
         return;
     }
+
+    hideSupabaseError();
 
 
     /* =====================================================
@@ -2260,7 +2388,7 @@ async function loadProfile(){
     const journey =
         Array.isArray(data.journey)
         ? data.journey
-        : [];
+        : (Array.isArray(data.academicJourney) ? data.academicJourney : []);
 
 
     if(journey.length === 0){
@@ -2545,7 +2673,10 @@ function renderAwards(items){
 const darkModeBtn = document.getElementById("darkModeBtn");
 
 if(darkModeBtn){
-    darkModeBtn.addEventListener("click", function(){
+    darkModeBtn.addEventListener("click", function(event){
+        event.preventDefault();
+        event.stopPropagation();
+
         document.body.classList.toggle("dark");
 
         localStorage.setItem(
