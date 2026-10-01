@@ -2890,39 +2890,39 @@ darkModeBtn.addEventListener(
 ========================================================= */
 
 const secretAdmin =
-    document.querySelector(
-        ".secret-admin-trigger"
-    );
+    document.querySelector(".secret-admin-trigger");
 
+const adminHeader =
+    document.querySelector(".navbar");
 
-secretAdmin.addEventListener(
-    "dblclick",
-    function(){
+function openAdminLogin(){
+    const password = prompt("Enter Admin Password");
 
-        const password =
-            prompt("Enter Admin Password");
+    if(password === null){
+        return;
+    }
 
+    if(password === "123"){
+        window.location.href = "professor-admin.html";
+    }else{
+        alert("Incorrect password.\nAccess denied.");
+    }
+}
 
-        if(password === null){
+// Double-click the logo/name OR anywhere in the header to open Admin.
+if(secretAdmin){
+    secretAdmin.addEventListener("dblclick", openAdminLogin);
+}
+
+if(adminHeader){
+    adminHeader.addEventListener("dblclick", function(event){
+        // Prevent a second trigger when the secret brand itself is double-clicked.
+        if(event.target.closest(".secret-admin-trigger")){
             return;
         }
-
-
-        if(password === "123"){
-
-            window.location.href =
-                "professor-admin.html";
-
-        }else{
-
-            alert(
-                "Incorrect password.\nAccess denied."
-            );
-
-        }
-
-    }
-);
+        openAdminLogin();
+    });
+}
 
 
 /* =========================================================
