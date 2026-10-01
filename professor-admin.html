@@ -1467,32 +1467,6 @@ textarea{
 
 </div>
 
-<div class="form-group">
-
-<label>
-    IRINS
-</label>
-
-<input
-    type="text"
-    id="irins"
-    placeholder="IRINS profile / ID">
-
-</div>
-
-
-<div class="form-group">
-
-<label>
-    OpenAlex
-</label>
-
-<input
-    type="text"
-    id="openAlex"
-    placeholder="OpenAlex author ID / profile">
-
-</div>
 
 </div>
 
@@ -1785,254 +1759,1098 @@ async function showDefaultPhoto(){
    RESEARCH
 ========================================================= */
 
-function addResearch(name="", description="", keywords=""){
+function addResearch(value=""){
 
-    // Backward compatibility: old saved string becomes the research name.
-    if(typeof name === "object" && name !== null){
-        description = name.description || "";
-        keywords = name.keywords || "";
-        name = name.name || name.title || "";
-    }
+    const container =
+        document.getElementById(
+            "researchRepeater"
+        );
 
-    const container = document.getElementById("researchRepeater");
-    const item = document.createElement("div");
-    item.className = "repeater-item";
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "repeater-item";
 
     item.innerHTML = `
-        <div class="item-number">Research Interest</div>
-        <div class="form-grid">
-            <div class="form-group full">
-                <label>Research Area / Interest</label>
-                <input type="text" class="research-input" placeholder="Artificial Intelligence / Biomedical Signal Processing" value="${escapeHTML(name)}">
-            </div>
-            <div class="form-group full">
-                <label>Description</label>
-                <textarea class="research-description" placeholder="Brief description of the research interest...">${escapeHTML(description)}</textarea>
-            </div>
-            <div class="form-group full">
-                <label>Keywords</label>
-                <input type="text" class="research-keywords" placeholder="AI, Deep Learning, Signal Processing" value="${escapeHTML(keywords)}">
-            </div>
+
+        <div class="item-number">
+            Research Area
         </div>
-        <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
+
+        <input
+            type="text"
+            class="research-input"
+            placeholder="Example: Artificial Intelligence"
+            value="${escapeHTML(value)}">
+
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="this.parentElement.remove()">
+
+            Remove
+
+        </button>
+
     `;
+
     container.appendChild(item);
+
 }
+
 
 /* =========================================================
    JOURNEY
 ========================================================= */
 
-function addJourney(year="", title="", institution="", role="", description=""){
-    if(typeof year === "object" && year !== null){
-        const o=year; year=o.year||""; title=o.title||""; institution=o.institution||""; role=o.role||""; description=o.description||"";
-    }
-    const container=document.getElementById("journeyRepeater");
-    const item=document.createElement("div"); item.className="repeater-item";
-    item.innerHTML=`
-      <div class="item-number">Academic Journey</div>
-      <div class="form-grid">
-        <div class="form-group"><label>Year / Period</label><input type="text" class="journey-year" placeholder="2020 - Present" value="${escapeHTML(year)}"></div>
-        <div class="form-group"><label>Milestone / Title</label><input type="text" class="journey-title" placeholder="Joined as Professor" value="${escapeHTML(title)}"></div>
-        <div class="form-group"><label>Institution</label><input type="text" class="journey-institution" placeholder="University / Institution" value="${escapeHTML(institution)}"></div>
-        <div class="form-group"><label>Role / Designation</label><input type="text" class="journey-role" placeholder="Professor / Researcher" value="${escapeHTML(role)}"></div>
-        <div class="form-group full"><label>Description</label><textarea class="journey-description" placeholder="Describe this academic or career milestone...">${escapeHTML(description)}</textarea></div>
-      </div>
-      <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>`;
+function addJourney(
+    year="",
+    title="",
+    description=""
+){
+
+    const container =
+        document.getElementById(
+            "journeyRepeater"
+        );
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "repeater-item";
+
+    item.innerHTML = `
+
+        <div class="item-number">
+            Academic Journey
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    Year
+                </label>
+
+                <input
+                    type="text"
+                    class="journey-year"
+                    placeholder="2020"
+                    value="${escapeHTML(year)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Title
+                </label>
+
+                <input
+                    type="text"
+                    class="journey-title"
+                    placeholder="Joined as Professor"
+                    value="${escapeHTML(title)}">
+
+            </div>
+
+            <div class="form-group full">
+
+                <label>
+                    Description
+                </label>
+
+                <textarea
+                    class="journey-description"
+                    placeholder="Describe this milestone...">${escapeHTML(description)}</textarea>
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="this.parentElement.remove()">
+
+            Remove
+
+        </button>
+
+    `;
+
     container.appendChild(item);
+
 }
+
 
 /* =========================================================
    EDUCATION
 ========================================================= */
 
-function addEducation(degree="", institution="", year="", specialization="", university="", grade=""){
-    if(typeof degree === "object" && degree !== null){ const o=degree; degree=o.degree||""; institution=o.institution||""; year=o.year||""; specialization=o.specialization||""; university=o.university||""; grade=o.grade||""; }
-    const container=document.getElementById("educationRepeater"); const item=document.createElement("div"); item.className="repeater-item";
-    item.innerHTML=`
-      <div class="item-number">Academic Qualification</div>
-      <div class="form-grid">
-        <div class="form-group"><label>Degree / Qualification</label><input type="text" class="education-degree" placeholder="Ph.D. / M.E. / M.Tech" value="${escapeHTML(degree)}"></div>
-        <div class="form-group"><label>Institution</label><input type="text" class="education-institution" placeholder="College / University" value="${escapeHTML(institution)}"></div>
-        <div class="form-group"><label>University / Board</label><input type="text" class="education-university" placeholder="University / Board" value="${escapeHTML(university)}"></div>
-        <div class="form-group"><label>Year</label><input type="text" class="education-year" placeholder="2020" value="${escapeHTML(year)}"></div>
-        <div class="form-group"><label>Specialization</label><input type="text" class="education-specialization" placeholder="Computer Science" value="${escapeHTML(specialization)}"></div>
-        <div class="form-group"><label>Grade / CGPA / Percentage</label><input type="text" class="education-grade" placeholder="8.5 CGPA / 85%" value="${escapeHTML(grade)}"></div>
-      </div>
-      <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>`;
+function addEducation(
+    degree="",
+    institution="",
+    year="",
+    specialization=""
+){
+
+    const container =
+        document.getElementById(
+            "educationRepeater"
+        );
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "repeater-item";
+
+    item.innerHTML = `
+
+        <div class="item-number">
+            Education
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    Degree
+                </label>
+
+                <input
+                    type="text"
+                    class="education-degree"
+                    placeholder="Ph.D."
+                    value="${escapeHTML(degree)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Institution
+                </label>
+
+                <input
+                    type="text"
+                    class="education-institution"
+                    placeholder="University Name"
+                    value="${escapeHTML(institution)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Year
+                </label>
+
+                <input
+                    type="text"
+                    class="education-year"
+                    placeholder="2020"
+                    value="${escapeHTML(year)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Specialization
+                </label>
+
+                <input
+                    type="text"
+                    class="education-specialization"
+                    placeholder="Computer Science"
+                    value="${escapeHTML(specialization)}">
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="this.parentElement.remove()">
+
+            Remove
+
+        </button>
+
+    `;
+
     container.appendChild(item);
+
 }
+
 
 /* =========================================================
    EXPERIENCE
 ========================================================= */
 
-function addExperience(designation="", institution="", period="", description="", experienceType="", location=""){
-    if(typeof designation === "object" && designation !== null){ const o=designation; designation=o.designation||""; institution=o.institution||""; period=o.period||""; description=o.description||""; experienceType=o.experienceType||""; location=o.location||""; }
-    const container=document.getElementById("experienceRepeater"); const item=document.createElement("div"); item.className="repeater-item";
-    item.innerHTML=`
-      <div class="item-number">Professional Experience</div>
-      <div class="form-grid">
-        <div class="form-group"><label>Designation / Position</label><input type="text" class="experience-designation" placeholder="Professor" value="${escapeHTML(designation)}"></div>
-        <div class="form-group"><label>Institution / Organization</label><input type="text" class="experience-institution" placeholder="University / Organization" value="${escapeHTML(institution)}"></div>
-        <div class="form-group"><label>Period</label><input type="text" class="experience-period" placeholder="2020 - Present" value="${escapeHTML(period)}"></div>
-        <div class="form-group"><label>Experience Type</label><input type="text" class="experience-type" placeholder="Teaching / Research / Industry" value="${escapeHTML(experienceType)}"></div>
-        <div class="form-group"><label>Location</label><input type="text" class="experience-location" placeholder="City, Country" value="${escapeHTML(location)}"></div>
-        <div class="form-group full"><label>Responsibilities / Description</label><textarea class="experience-description" placeholder="Teaching, research, administration, industry responsibilities...">${escapeHTML(description)}</textarea></div>
-      </div>
-      <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>`;
+function addExperience(
+    designation="",
+    institution="",
+    period="",
+    description=""
+){
+
+    const container =
+        document.getElementById(
+            "experienceRepeater"
+        );
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "repeater-item";
+
+    item.innerHTML = `
+
+        <div class="item-number">
+            Professional Experience
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    Designation
+                </label>
+
+                <input
+                    type="text"
+                    class="experience-designation"
+                    placeholder="Professor"
+                    value="${escapeHTML(designation)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Institution
+                </label>
+
+                <input
+                    type="text"
+                    class="experience-institution"
+                    placeholder="College / University"
+                    value="${escapeHTML(institution)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Period
+                </label>
+
+                <input
+                    type="text"
+                    class="experience-period"
+                    placeholder="2020 - Present"
+                    value="${escapeHTML(period)}">
+
+            </div>
+
+            <div class="form-group full">
+
+                <label>
+                    Description
+                </label>
+
+                <textarea
+                    class="experience-description"
+                    placeholder="Describe responsibilities...">${escapeHTML(description)}</textarea>
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="this.parentElement.remove()">
+
+            Remove
+
+        </button>
+
+    `;
+
     container.appendChild(item);
+
 }
+
 
 /* =========================================================
    PUBLICATIONS
 ========================================================= */
 
-function addPublication(title="", authors="", year="", type="", link="", journal="", volume="", issue="", articleNumber="", pages="", citations="", doi=""){
-    if(typeof title === "object" && title !== null){ const o=title; title=o.title||""; authors=o.authors||""; year=o.year||""; type=o.type||""; link=o.link||""; journal=o.journal||""; volume=o.volume||""; issue=o.issue||""; articleNumber=o.articleNumber||""; pages=o.pages||""; citations=o.citations||""; doi=o.doi||""; }
-    const container=document.getElementById("publicationRepeater"); const item=document.createElement("div"); item.className="repeater-item";
-    item.innerHTML=`
-      <div class="item-number">Publication</div>
-      <div class="form-grid">
-        <div class="form-group full"><label>Publication Title</label><input type="text" class="publication-title" placeholder="Research paper title" value="${escapeHTML(title)}"></div>
-        <div class="form-group full"><label>Authors</label><input type="text" class="publication-authors" placeholder="Author names" value="${escapeHTML(authors)}"></div>
-        <div class="form-group"><label>Journal / Conference / Publisher</label><input type="text" class="publication-journal" placeholder="Biomedical Signal Processing and Control" value="${escapeHTML(journal)}"></div>
-        <div class="form-group"><label>Year</label><input type="text" class="publication-year" placeholder="2024" value="${escapeHTML(year)}"></div>
-        <div class="form-group"><label>Volume</label><input type="text" class="publication-volume" placeholder="79" value="${escapeHTML(volume)}"></div>
-        <div class="form-group"><label>Issue</label><input type="text" class="publication-issue" placeholder="4" value="${escapeHTML(issue)}"></div>
-        <div class="form-group"><label>Article Number</label><input type="text" class="publication-article-number" placeholder="104197" value="${escapeHTML(articleNumber)}"></div>
-        <div class="form-group"><label>Pages</label><input type="text" class="publication-pages" placeholder="123-135" value="${escapeHTML(pages)}"></div>
-        <div class="form-group"><label>Citations</label><input type="number" min="0" class="publication-citations" placeholder="0" value="${escapeHTML(citations)}"></div>
-        <div class="form-group"><label>Type</label><select class="publication-type"><option value="">Select Type</option><option value="Journal" ${type==="Journal"?"selected":""}>Journal</option><option value="Conference" ${type==="Conference"?"selected":""}>Conference</option><option value="Book Chapter" ${type==="Book Chapter"?"selected":""}>Book Chapter</option><option value="Book" ${type==="Book"?"selected":""}>Book</option><option value="Other" ${type==="Other"?"selected":""}>Other</option></select></div>
-        <div class="form-group"><label>DOI</label><input type="text" class="publication-doi" placeholder="10.xxxx/xxxxx" value="${escapeHTML(doi)}"></div>
-        <div class="form-group full"><label>Publication Link</label><input type="url" class="publication-link" placeholder="https://..." value="${escapeHTML(link)}"></div>
-      </div>
-      <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>`;
+function addPublication(
+    title="",
+    authors="",
+    year="",
+    type="",
+    link=""
+){
+
+    const container =
+        document.getElementById(
+            "publicationRepeater"
+        );
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "repeater-item";
+
+    item.innerHTML = `
+
+        <div class="item-number">
+            Publication
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group full">
+
+                <label>
+                    Publication Title
+                </label>
+
+                <input
+                    type="text"
+                    class="publication-title"
+                    placeholder="Research paper title"
+                    value="${escapeHTML(title)}">
+
+            </div>
+
+            <div class="form-group full">
+
+                <label>
+                    Authors
+                </label>
+
+                <input
+                    type="text"
+                    class="publication-authors"
+                    placeholder="Author names"
+                    value="${escapeHTML(authors)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Year
+                </label>
+
+                <input
+                    type="text"
+                    class="publication-year"
+                    placeholder="2026"
+                    value="${escapeHTML(year)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Type
+                </label>
+
+                <select class="publication-type">
+
+                    <option value="">
+                        Select Type
+                    </option>
+
+                    <option value="Journal"
+                        ${type==="Journal" ? "selected" : ""}>
+                        Journal
+                    </option>
+
+                    <option value="Conference"
+                        ${type==="Conference" ? "selected" : ""}>
+                        Conference
+                    </option>
+
+                    <option value="Book Chapter"
+                        ${type==="Book Chapter" ? "selected" : ""}>
+                        Book Chapter
+                    </option>
+
+                    <option value="Book"
+                        ${type==="Book" ? "selected" : ""}>
+                        Book
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group full">
+
+                <label>
+                    Publication Link
+                </label>
+
+                <input
+                    type="url"
+                    class="publication-link"
+                    placeholder="https://..."
+                    value="${escapeHTML(link)}">
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="this.parentElement.remove()">
+
+            Remove
+
+        </button>
+
+    `;
+
     container.appendChild(item);
+
 }
+
 
 /* =========================================================
    PATENTS
 ========================================================= */
 
-function addPatent(title="", number="", year="", status="", inventors="", filingDate="", office="", link="", description=""){
-    if(typeof title === "object" && title !== null){ const o=title; title=o.title||""; number=o.number||""; year=o.year||""; status=o.status||""; inventors=o.inventors||""; filingDate=o.filingDate||""; office=o.office||""; link=o.link||""; description=o.description||""; }
-    const container=document.getElementById("patentRepeater"); const item=document.createElement("div"); item.className="repeater-item";
-    item.innerHTML=`
-      <div class="item-number">Patent</div>
-      <div class="form-grid">
-        <div class="form-group full"><label>Patent Title</label><input type="text" class="patent-title" placeholder="Patent title" value="${escapeHTML(title)}"></div>
-        <div class="form-group"><label>Patent Number</label><input type="text" class="patent-number" placeholder="Patent / Application number" value="${escapeHTML(number)}"></div>
-        <div class="form-group"><label>Year</label><input type="text" class="patent-year" placeholder="2026" value="${escapeHTML(year)}"></div>
-        <div class="form-group"><label>Filing / Publication Date</label><input type="text" class="patent-filing-date" placeholder="DD-MM-YYYY" value="${escapeHTML(filingDate)}"></div>
-        <div class="form-group"><label>Status</label><select class="patent-status"><option value="">Select Status</option><option value="Filed" ${status==="Filed"?"selected":""}>Filed</option><option value="Published" ${status==="Published"?"selected":""}>Published</option><option value="Granted" ${status==="Granted"?"selected":""}>Granted</option><option value="Applied" ${status==="Applied"?"selected":""}>Applied</option></select></div>
-        <div class="form-group"><label>Inventors</label><input type="text" class="patent-inventors" placeholder="Inventor names" value="${escapeHTML(inventors)}"></div>
-        <div class="form-group"><label>Patent Office / Country</label><input type="text" class="patent-office" placeholder="Indian Patent Office" value="${escapeHTML(office)}"></div>
-        <div class="form-group full"><label>Description</label><textarea class="patent-description" placeholder="Brief patent description...">${escapeHTML(description)}</textarea></div>
-        <div class="form-group full"><label>Patent Link</label><input type="url" class="patent-link" placeholder="https://..." value="${escapeHTML(link)}"></div>
-      </div>
-      <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>`;
+function addPatent(
+    title="",
+    number="",
+    year="",
+    status=""
+){
+
+    const container =
+        document.getElementById(
+            "patentRepeater"
+        );
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "repeater-item";
+
+    item.innerHTML = `
+
+        <div class="item-number">
+            Patent
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group full">
+
+                <label>
+                    Patent Title
+                </label>
+
+                <input
+                    type="text"
+                    class="patent-title"
+                    placeholder="Patent title"
+                    value="${escapeHTML(title)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Patent Number
+                </label>
+
+                <input
+                    type="text"
+                    class="patent-number"
+                    placeholder="Patent number"
+                    value="${escapeHTML(number)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Year
+                </label>
+
+                <input
+                    type="text"
+                    class="patent-year"
+                    placeholder="2026"
+                    value="${escapeHTML(year)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Status
+                </label>
+
+                <select class="patent-status">
+
+                    <option value="">
+                        Select Status
+                    </option>
+
+                    <option value="Filed"
+                        ${status==="Filed" ? "selected" : ""}>
+                        Filed
+                    </option>
+
+                    <option value="Published"
+                        ${status==="Published" ? "selected" : ""}>
+                        Published
+                    </option>
+
+                    <option value="Granted"
+                        ${status==="Granted" ? "selected" : ""}>
+                        Granted
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="this.parentElement.remove()">
+
+            Remove
+
+        </button>
+
+    `;
+
     container.appendChild(item);
+
 }
+
 
 /* =========================================================
    PROJECTS
 ========================================================= */
 
-function addProject(title="", agency="", year="", description="", role="", amount="", duration="", status="", link=""){
-    if(typeof title === "object" && title !== null){ const o=title; title=o.title||""; agency=o.agency||""; year=o.year||""; description=o.description||""; role=o.role||""; amount=o.amount||""; duration=o.duration||""; status=o.status||""; link=o.link||""; }
-    const container=document.getElementById("projectRepeater"); const item=document.createElement("div"); item.className="repeater-item";
-    item.innerHTML=`
-      <div class="item-number">Research Project</div>
-      <div class="form-grid">
-        <div class="form-group full"><label>Project Title</label><input type="text" class="project-title" placeholder="Project title" value="${escapeHTML(title)}"></div>
-        <div class="form-group"><label>Funding Agency</label><input type="text" class="project-agency" placeholder="Funding agency" value="${escapeHTML(agency)}"></div>
-        <div class="form-group"><label>Principal Investigator / Role</label><input type="text" class="project-role" placeholder="PI / Co-PI / Researcher" value="${escapeHTML(role)}"></div>
-        <div class="form-group"><label>Year</label><input type="text" class="project-year" placeholder="2026" value="${escapeHTML(year)}"></div>
-        <div class="form-group"><label>Grant / Funding Amount</label><input type="text" class="project-amount" placeholder="₹ 10,00,000" value="${escapeHTML(amount)}"></div>
-        <div class="form-group"><label>Duration</label><input type="text" class="project-duration" placeholder="2025 - 2028 / 36 months" value="${escapeHTML(duration)}"></div>
-        <div class="form-group"><label>Status</label><input type="text" class="project-status" placeholder="Ongoing / Completed" value="${escapeHTML(status)}"></div>
-        <div class="form-group full"><label>Description</label><textarea class="project-description" placeholder="Project description, objectives and outcomes...">${escapeHTML(description)}</textarea></div>
-        <div class="form-group full"><label>Project Link</label><input type="url" class="project-link" placeholder="https://..." value="${escapeHTML(link)}"></div>
-      </div>
-      <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>`;
+function addProject(
+    title="",
+    agency="",
+    year="",
+    description=""
+){
+
+    const container =
+        document.getElementById(
+            "projectRepeater"
+        );
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "repeater-item";
+
+    item.innerHTML = `
+
+        <div class="item-number">
+            Research Project
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group full">
+
+                <label>
+                    Project Title
+                </label>
+
+                <input
+                    type="text"
+                    class="project-title"
+                    placeholder="Project title"
+                    value="${escapeHTML(title)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Funding Agency
+                </label>
+
+                <input
+                    type="text"
+                    class="project-agency"
+                    placeholder="Funding agency"
+                    value="${escapeHTML(agency)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Year
+                </label>
+
+                <input
+                    type="text"
+                    class="project-year"
+                    placeholder="2026"
+                    value="${escapeHTML(year)}">
+
+            </div>
+
+            <div class="form-group full">
+
+                <label>
+                    Description
+                </label>
+
+                <textarea
+                    class="project-description"
+                    placeholder="Project description...">${escapeHTML(description)}</textarea>
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="this.parentElement.remove()">
+
+            Remove
+
+        </button>
+
+    `;
+
     container.appendChild(item);
+
 }
+
 
 /* =========================================================
    AWARDS
 ========================================================= */
 
-function addAward(title="", organization="", year="", description="", category="", link=""){
-    if(typeof title === "object" && title !== null){ const o=title; title=o.title||""; organization=o.organization||""; year=o.year||""; description=o.description||""; category=o.category||""; link=o.link||""; }
-    const container=document.getElementById("awardRepeater"); const item=document.createElement("div"); item.className="repeater-item";
-    item.innerHTML=`
-      <div class="item-number">Award / Achievement</div>
-      <div class="form-grid">
-        <div class="form-group full"><label>Award / Achievement</label><input type="text" class="award-title" placeholder="Award title" value="${escapeHTML(title)}"></div>
-        <div class="form-group"><label>Organization / Issuing Body</label><input type="text" class="award-organization" placeholder="Organization" value="${escapeHTML(organization)}"></div>
-        <div class="form-group"><label>Year</label><input type="text" class="award-year" placeholder="2026" value="${escapeHTML(year)}"></div>
-        <div class="form-group"><label>Category</label><input type="text" class="award-category" placeholder="Research / Teaching / Recognition" value="${escapeHTML(category)}"></div>
-        <div class="form-group full"><label>Description</label><textarea class="award-description" placeholder="Brief details of the award or achievement...">${escapeHTML(description)}</textarea></div>
-        <div class="form-group full"><label>Evidence / Link</label><input type="url" class="award-link" placeholder="https://..." value="${escapeHTML(link)}"></div>
-      </div>
-      <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>`;
+function addAward(
+    title="",
+    organization="",
+    year=""
+){
+
+    const container =
+        document.getElementById(
+            "awardRepeater"
+        );
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "repeater-item";
+
+    item.innerHTML = `
+
+        <div class="item-number">
+            Award / Achievement
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group full">
+
+                <label>
+                    Award / Achievement
+                </label>
+
+                <input
+                    type="text"
+                    class="award-title"
+                    placeholder="Award title"
+                    value="${escapeHTML(title)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Organization
+                </label>
+
+                <input
+                    type="text"
+                    class="award-organization"
+                    placeholder="Organization"
+                    value="${escapeHTML(organization)}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Year
+                </label>
+
+                <input
+                    type="text"
+                    class="award-year"
+                    placeholder="2026"
+                    value="${escapeHTML(year)}">
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="this.parentElement.remove()">
+
+            Remove
+
+        </button>
+
+    `;
+
     container.appendChild(item);
+
 }
+
 
 /* =========================================================
    COLLECT RESEARCH
 ========================================================= */
 
 function collectResearch(){
-    return [...document.querySelectorAll("#researchRepeater .repeater-item")].map(item=>({
-        name:item.querySelector(".research-input")?.value.trim()||"",
-        description:item.querySelector(".research-description")?.value.trim()||"",
-        keywords:item.querySelector(".research-keywords")?.value.trim()||""
-    })).filter(x=>x.name||x.description||x.keywords);
+
+    return [
+        ...document.querySelectorAll(
+            ".research-input"
+        )
+    ]
+    .map(input => input.value.trim())
+    .filter(value => value !== "");
+
 }
+
+
+/* =========================================================
+   COLLECT JOURNEY
+========================================================= */
 
 function collectJourney(){
-    return [...document.querySelectorAll("#journeyRepeater .repeater-item")].map(item=>({
-        year:item.querySelector(".journey-year")?.value.trim()||"", title:item.querySelector(".journey-title")?.value.trim()||"", institution:item.querySelector(".journey-institution")?.value.trim()||"", role:item.querySelector(".journey-role")?.value.trim()||"", description:item.querySelector(".journey-description")?.value.trim()||""
-    })).filter(x=>x.year||x.title||x.institution||x.role||x.description);
+
+    return [
+        ...document.querySelectorAll(
+            "#journeyRepeater .repeater-item"
+        )
+    ]
+    .map(item => {
+
+        return {
+
+            year:
+                item.querySelector(
+                    ".journey-year"
+                ).value.trim(),
+
+            title:
+                item.querySelector(
+                    ".journey-title"
+                ).value.trim(),
+
+            description:
+                item.querySelector(
+                    ".journey-description"
+                ).value.trim()
+
+        };
+
+    });
+
 }
+
+
+/* =========================================================
+   COLLECT EDUCATION
+========================================================= */
 
 function collectEducation(){
-    return [...document.querySelectorAll("#educationRepeater .repeater-item")].map(item=>({
-        degree:item.querySelector(".education-degree")?.value.trim()||"", institution:item.querySelector(".education-institution")?.value.trim()||"", university:item.querySelector(".education-university")?.value.trim()||"", year:item.querySelector(".education-year")?.value.trim()||"", specialization:item.querySelector(".education-specialization")?.value.trim()||"", grade:item.querySelector(".education-grade")?.value.trim()||""
-    })).filter(x=>x.degree||x.institution||x.university||x.year||x.specialization||x.grade);
+
+    return [
+        ...document.querySelectorAll(
+            "#educationRepeater .repeater-item"
+        )
+    ]
+    .map(item => {
+
+        return {
+
+            degree:
+                item.querySelector(
+                    ".education-degree"
+                ).value.trim(),
+
+            institution:
+                item.querySelector(
+                    ".education-institution"
+                ).value.trim(),
+
+            year:
+                item.querySelector(
+                    ".education-year"
+                ).value.trim(),
+
+            specialization:
+                item.querySelector(
+                    ".education-specialization"
+                ).value.trim()
+
+        };
+
+    });
+
 }
+
+
+/* =========================================================
+   COLLECT EXPERIENCE
+========================================================= */
 
 function collectExperience(){
-    return [...document.querySelectorAll("#experienceRepeater .repeater-item")].map(item=>({
-        designation:item.querySelector(".experience-designation")?.value.trim()||"", institution:item.querySelector(".experience-institution")?.value.trim()||"", period:item.querySelector(".experience-period")?.value.trim()||"", experienceType:item.querySelector(".experience-type")?.value.trim()||"", location:item.querySelector(".experience-location")?.value.trim()||"", description:item.querySelector(".experience-description")?.value.trim()||""
-    })).filter(x=>x.designation||x.institution||x.period||x.experienceType||x.location||x.description);
+
+    return [
+        ...document.querySelectorAll(
+            "#experienceRepeater .repeater-item"
+        )
+    ]
+    .map(item => {
+
+        return {
+
+            designation:
+                item.querySelector(
+                    ".experience-designation"
+                ).value.trim(),
+
+            institution:
+                item.querySelector(
+                    ".experience-institution"
+                ).value.trim(),
+
+            period:
+                item.querySelector(
+                    ".experience-period"
+                ).value.trim(),
+
+            description:
+                item.querySelector(
+                    ".experience-description"
+                ).value.trim()
+
+        };
+
+    });
+
 }
+
+
+/* =========================================================
+   COLLECT PUBLICATIONS
+========================================================= */
 
 function collectPublications(){
-    return [...document.querySelectorAll("#publicationRepeater .repeater-item")].map(item=>({
-        title:item.querySelector(".publication-title")?.value.trim()||"", authors:item.querySelector(".publication-authors")?.value.trim()||"", journal:item.querySelector(".publication-journal")?.value.trim()||"", year:item.querySelector(".publication-year")?.value.trim()||"", volume:item.querySelector(".publication-volume")?.value.trim()||"", issue:item.querySelector(".publication-issue")?.value.trim()||"", articleNumber:item.querySelector(".publication-article-number")?.value.trim()||"", pages:item.querySelector(".publication-pages")?.value.trim()||"", citations:item.querySelector(".publication-citations")?.value.trim()||"", doi:item.querySelector(".publication-doi")?.value.trim()||"", type:item.querySelector(".publication-type")?.value||"", link:item.querySelector(".publication-link")?.value.trim()||""
-    })).filter(x=>x.title||x.authors||x.journal);
+
+    return [
+        ...document.querySelectorAll(
+            "#publicationRepeater .repeater-item"
+        )
+    ]
+    .map(item => {
+
+        return {
+
+            title:
+                item.querySelector(
+                    ".publication-title"
+                ).value.trim(),
+
+            authors:
+                item.querySelector(
+                    ".publication-authors"
+                ).value.trim(),
+
+            year:
+                item.querySelector(
+                    ".publication-year"
+                ).value.trim(),
+
+            type:
+                item.querySelector(
+                    ".publication-type"
+                ).value,
+
+            link:
+                item.querySelector(
+                    ".publication-link"
+                ).value.trim()
+
+        };
+
+    });
+
 }
+
+
+/* =========================================================
+   COLLECT PATENTS
+========================================================= */
 
 function collectPatents(){
-    return [...document.querySelectorAll("#patentRepeater .repeater-item")].map(item=>({
-        title:item.querySelector(".patent-title")?.value.trim()||"", number:item.querySelector(".patent-number")?.value.trim()||"", year:item.querySelector(".patent-year")?.value.trim()||"", filingDate:item.querySelector(".patent-filing-date")?.value.trim()||"", status:item.querySelector(".patent-status")?.value||"", inventors:item.querySelector(".patent-inventors")?.value.trim()||"", office:item.querySelector(".patent-office")?.value.trim()||"", description:item.querySelector(".patent-description")?.value.trim()||"", link:item.querySelector(".patent-link")?.value.trim()||""
-    })).filter(x=>x.title||x.number||x.inventors);
+
+    return [
+        ...document.querySelectorAll(
+            "#patentRepeater .repeater-item"
+        )
+    ]
+    .map(item => {
+
+        return {
+
+            title:
+                item.querySelector(
+                    ".patent-title"
+                ).value.trim(),
+
+            number:
+                item.querySelector(
+                    ".patent-number"
+                ).value.trim(),
+
+            year:
+                item.querySelector(
+                    ".patent-year"
+                ).value.trim(),
+
+            status:
+                item.querySelector(
+                    ".patent-status"
+                ).value
+
+        };
+
+    });
+
 }
+
+
+/* =========================================================
+   COLLECT PROJECTS
+========================================================= */
 
 function collectProjects(){
-    return [...document.querySelectorAll("#projectRepeater .repeater-item")].map(item=>({
-        title:item.querySelector(".project-title")?.value.trim()||"", agency:item.querySelector(".project-agency")?.value.trim()||"", role:item.querySelector(".project-role")?.value.trim()||"", year:item.querySelector(".project-year")?.value.trim()||"", amount:item.querySelector(".project-amount")?.value.trim()||"", duration:item.querySelector(".project-duration")?.value.trim()||"", status:item.querySelector(".project-status")?.value.trim()||"", description:item.querySelector(".project-description")?.value.trim()||"", link:item.querySelector(".project-link")?.value.trim()||""
-    })).filter(x=>x.title||x.agency||x.description);
+
+    return [
+        ...document.querySelectorAll(
+            "#projectRepeater .repeater-item"
+        )
+    ]
+    .map(item => {
+
+        return {
+
+            title:
+                item.querySelector(
+                    ".project-title"
+                ).value.trim(),
+
+            agency:
+                item.querySelector(
+                    ".project-agency"
+                ).value.trim(),
+
+            year:
+                item.querySelector(
+                    ".project-year"
+                ).value.trim(),
+
+            description:
+                item.querySelector(
+                    ".project-description"
+                ).value.trim()
+
+        };
+
+    });
+
 }
 
+
+/* =========================================================
+   COLLECT AWARDS
+========================================================= */
+
 function collectAwards(){
-    return [...document.querySelectorAll("#awardRepeater .repeater-item")].map(item=>({
-        title:item.querySelector(".award-title")?.value.trim()||"", organization:item.querySelector(".award-organization")?.value.trim()||"", year:item.querySelector(".award-year")?.value.trim()||"", category:item.querySelector(".award-category")?.value.trim()||"", description:item.querySelector(".award-description")?.value.trim()||"", link:item.querySelector(".award-link")?.value.trim()||""
-    })).filter(x=>x.title||x.organization||x.description);
+
+    return [
+        ...document.querySelectorAll(
+            "#awardRepeater .repeater-item"
+        )
+    ]
+    .map(item => {
+
+        return {
+
+            title:
+                item.querySelector(
+                    ".award-title"
+                ).value.trim(),
+
+            organization:
+                item.querySelector(
+                    ".award-organization"
+                ).value.trim(),
+
+            year:
+                item.querySelector(
+                    ".award-year"
+                ).value.trim()
+
+        };
+
+    });
+
 }
+
 
 /* =========================================================
    SAVE PROFILE
@@ -2221,13 +3039,7 @@ async function saveAll(){
 
                 document
                 .getElementById("researcherId")
-                .value.trim(),
-
-            irins:
-                document.getElementById("irins").value.trim(),
-
-            openAlex:
-                document.getElementById("openAlex").value.trim()
+                .value.trim()
 
         },
 
@@ -2469,10 +3281,9 @@ async function loadAll(){
         Array.isArray(data.researchAreas)
     ){
 
-        data.researchAreas.forEach(area => {
-            if(typeof area === "string") addResearch(area);
-            else addResearch(area.name || area.title || "", area.description || "", area.keywords || "");
-        });
+        data.researchAreas.forEach(
+            area => addResearch(area)
+        );
 
     }
 
@@ -2494,7 +3305,9 @@ async function loadAll(){
         data.journey.forEach(item => {
 
             addJourney(
-                item.year || "", item.title || "", item.institution || "", item.role || "", item.description || ""
+                item.year || "",
+                item.title || "",
+                item.description || ""
             );
 
         });
@@ -2519,7 +3332,10 @@ async function loadAll(){
         data.education.forEach(item => {
 
             addEducation(
-                item.degree || "", item.institution || "", item.year || "", item.specialization || "", item.university || "", item.grade || ""
+                item.degree || "",
+                item.institution || "",
+                item.year || "",
+                item.specialization || ""
             );
 
         });
@@ -2544,7 +3360,10 @@ async function loadAll(){
         data.experience.forEach(item => {
 
             addExperience(
-                item.designation || "", item.institution || "", item.period || "", item.description || "", item.experienceType || "", item.location || ""
+                item.designation || "",
+                item.institution || "",
+                item.period || "",
+                item.description || ""
             );
 
         });
@@ -2569,7 +3388,11 @@ async function loadAll(){
         data.publications.forEach(item => {
 
             addPublication(
-                item.title || "", item.authors || "", item.year || "", item.type || "", item.link || "", item.journal || "", item.volume || "", item.issue || "", item.articleNumber || "", item.pages || "", item.citations || "", item.doi || ""
+                item.title || "",
+                item.authors || "",
+                item.year || "",
+                item.type || "",
+                item.link || ""
             );
 
         });
@@ -2594,7 +3417,10 @@ async function loadAll(){
         data.patents.forEach(item => {
 
             addPatent(
-                item.title || "", item.number || "", item.year || "", item.status || "", item.inventors || "", item.filingDate || "", item.office || "", item.link || "", item.description || ""
+                item.title || "",
+                item.number || "",
+                item.year || "",
+                item.status || ""
             );
 
         });
@@ -2619,7 +3445,10 @@ async function loadAll(){
         data.projects.forEach(item => {
 
             addProject(
-                item.title || "", item.agency || "", item.year || "", item.description || "", item.role || "", item.amount || "", item.duration || "", item.status || "", item.link || ""
+                item.title || "",
+                item.agency || "",
+                item.year || "",
+                item.description || ""
             );
 
         });
@@ -2644,7 +3473,9 @@ async function loadAll(){
         data.awards.forEach(item => {
 
             addAward(
-                item.title || "", item.organization || "", item.year || "", item.description || "", item.category || "", item.link || ""
+                item.title || "",
+                item.organization || "",
+                item.year || ""
             );
 
         });
@@ -2684,9 +3515,6 @@ async function loadAll(){
         "researcherId",
         identifiers.researcherId
     );
-
-    setValue("irins", identifiers.irins);
-    setValue("openAlex", identifiers.openAlex);
 
 
     /* =====================================================
