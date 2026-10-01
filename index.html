@@ -1,3 +1,4 @@
+```
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2538,10 +2539,30 @@ function renderAwards(items){
 }
 
 /* =========================================================
-   INITIAL LOAD
+   DARK MODE
 ========================================================= */
 
-applyDarkMode();
+const darkModeBtn = document.getElementById("darkModeBtn");
+
+if(darkModeBtn){
+    darkModeBtn.addEventListener("click", function(){
+        document.body.classList.toggle("dark");
+
+        localStorage.setItem(
+            "professorDarkMode",
+            document.body.classList.contains("dark") ? "1" : "0"
+        );
+    });
+}
+
+if(localStorage.getItem("professorDarkMode") === "1"){
+    document.body.classList.add("dark");
+}
+
+
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
 
 loadProfile();
 
@@ -2550,3 +2571,4 @@ loadProfile();
 
 </body>
 </html>
+```
