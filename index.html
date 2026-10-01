@@ -1914,14 +1914,29 @@ body.dark .research-tag{
      JAVASCRIPT
 ===================================================== -->
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+
+/* =========================================================
+   SUPABASE CONFIGURATION
+   Replace these two placeholders with values from your
+   Supabase Project Settings -> API.
+========================================================= */
+
+const SUPABASE_URL = "https://fumqtdhinkxvaytamkog.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_AD5a082KlCS3rzQfh-EQcA_XxJjRZlx";
+
+const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+const PROFILE_ROW_ID = 1;
 
 /* =========================================================
    STORAGE
 ========================================================= */
 
-const STORAGE_KEY = "professorProfile";
-const PHOTO_KEY = "professorPhoto";
 
 
 /* =========================================================
@@ -1966,25 +1981,38 @@ function safeURL(url){
    LOAD PROFILE
 ========================================================= */
 
-function loadProfile(){
+async function loadProfile(){
 
     let data = null;
+    let photo = null;
 
     try{
 
-        const saved =
-            localStorage.getItem(STORAGE_KEY);
+        const { data: row, error } =
+            await supabase
+                .from("professor_profile")
+                .select("profile_data, photo_data")
+                .eq("id", PROFILE_ROW_ID)
+                .maybeSingle();
 
-        if(saved){
-            data = JSON.parse(saved);
+        if(error){
+            throw error;
+        }
+
+        if(row){
+            data = row.profile_data || null;
+            photo = row.photo_data || null;
         }
 
     }catch(error){
 
         console.error(
-            "Unable to load profile:",
+            "Unable to load profile from Supabase:",
             error
         );
+
+        renderEmptySections();
+        return;
 
     }
 
@@ -2069,9 +2097,6 @@ function loadProfile(){
     /* =====================================================
        PHOTO
     ===================================================== */
-
-    const photo =
-        localStorage.getItem(PHOTO_KEY);
 
     const photoElement =
         document.getElementById("profilePhoto");
@@ -2901,27 +2926,27 @@ secretAdmin.addEventListener(
 
 
 /* =========================================================
-   STORAGE UPDATE
+   ONLINE PROFILE REFRESH
 ========================================================= */
 
 /*
-    If admin page is opened in another browser tab,
-    index page can automatically update when storage changes.
+    The profile is stored in Supabase, so refresh it whenever
+    this page becomes visible again on any device.
 */
 
-window.addEventListener(
-    "storage",
-    function(event){
-
-        if(
-            event.key === STORAGE_KEY ||
-            event.key === PHOTO_KEY
-        ){
-
+document.addEventListener(
+    "visibilitychange",
+    function(){
+        if(!document.hidden){
             loadProfile();
-
         }
+    }
+);
 
+window.addEventListener(
+    "focus",
+    function(){
+        loadProfile();
     }
 );
 

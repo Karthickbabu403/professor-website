@@ -1598,17 +1598,32 @@ textarea{
 
 
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 
 /* =========================================================
-   STORAGE KEYS
+   SUPABASE CONFIGURATION
+   Replace these two placeholders with values from your
+   Supabase Project Settings -> API.
 ========================================================= */
 
-const STORAGE_KEY =
-    "professorProfile";
+const SUPABASE_URL = "https://fumqtdhinkxvaytamkog.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_AD5a082KlCS3rzQfh-EQcA_XxJjRZlx";
 
-const PHOTO_KEY =
-    "professorPhoto";
+const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+const PROFILE_ROW_ID = 1;
+let currentPhotoData = null;
+let selectedPhotoData = null;
+
+/* =========================================================
+   STORAGE KEYS
+   (Profile data is now stored online in Supabase.)
+========================================================= */
+
 
 
 /* =========================================================
@@ -1662,10 +1677,8 @@ document
             reader.onload =
                 function(event){
 
-                    localStorage.setItem(
-                        PHOTO_KEY,
-                        event.target.result
-                    );
+                    selectedPhotoData = event.target.result;
+                    currentPhotoData = event.target.result;
 
                     document
                         .getElementById(
@@ -1686,12 +1699,28 @@ document
    DEFAULT PHOTO
 ========================================================= */
 
-function showDefaultPhoto(){
+async function showDefaultPhoto(){
 
-    const photo =
-        localStorage.getItem(
-            PHOTO_KEY
-        );
+    let photo = null;
+
+    try{
+        const { data, error } =
+            await supabase
+                .from("professor_profile")
+                .select("photo_data")
+                .eq("id", PROFILE_ROW_ID)
+                .maybeSingle();
+
+        if(error){
+            throw error;
+        }
+
+        photo = data?.photo_data || null;
+        currentPhotoData = photo;
+
+    }catch(error){
+        console.error("Unable to load professor photo:", error);
+    }
 
     if(photo){
 
@@ -2839,7 +2868,7 @@ function collectAwards(){
    SAVE PROFILE
 ========================================================= */
 
-function saveAll(){
+async function saveAll(){
 
     const name =
         document
@@ -3054,27 +3083,40 @@ function saveAll(){
 
     try{
 
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(profile)
-        );
+        const { error } =
+            await supabase
+                .from("professor_profile")
+                .upsert(
+                    {
+                        id: PROFILE_ROW_ID,
+                        profile_data: profile,
+                        photo_data: currentPhotoData || null,
+                        updated_at: new Date().toISOString()
+                    },
+                    { onConflict: "id" }
+                );
 
+        if(error){
+            throw error;
+        }
 
         document
             .getElementById("status")
             .textContent =
-            "✓ Profile saved successfully";
+            "✓ Profile saved online successfully";
 
+        selectedPhotoData = null;
 
         return true;
 
     }catch(error){
 
-        console.error(error);
+        console.error("Supabase save error:", error);
 
         alert(
-            "Unable to save profile. " +
-            "The browser storage may be full."
+            "Unable to save profile online.\n\n" +
+            "Check your Supabase URL/key, table setup, and RLS policies.\n\n" +
+            error.message
         );
 
         return false;
@@ -3088,9 +3130,9 @@ function saveAll(){
    SAVE & VIEW
 ========================================================= */
 
-function saveAndView(){
+async function saveAndView(){
 
-    if(saveAll()){
+    if(await saveAll()){
 
         setTimeout(
             function(){
@@ -3123,45 +3165,52 @@ function goToProfile(){
    LOAD EXISTING DATA
 ========================================================= */
 
-function loadAll(){
+async function loadAll(){
 
-    showDefaultPhoto();
+    await showDefaultPhoto();
 
+    let data = null;
 
-    const saved =
-        localStorage.getItem(
-            STORAGE_KEY
+    try{
+
+        const { data: row, error } =
+            await supabase
+                .from("professor_profile")
+                .select("profile_data, photo_data")
+                .eq("id", PROFILE_ROW_ID)
+                .maybeSingle();
+
+        if(error){
+            throw error;
+        }
+
+        if(!row){
+            /* No online profile has been created yet. */
+            return;
+        }
+
+        data = row.profile_data || null;
+        currentPhotoData = row.photo_data || null;
+
+    }catch(error){
+
+        console.error(
+            "Unable to load online profile:",
+            error
         );
 
-
-    if(!saved){
-
-        /*
-            IMPORTANT:
-            No default input data is inserted.
-        */
+        alert(
+            "Unable to load profile from Supabase.\n\n" +
+            "Check your Supabase URL/key, table setup, and RLS policies.\n\n" +
+            error.message
+        );
 
         return;
 
     }
 
-
-    let data;
-
-    try{
-
-        data =
-            JSON.parse(saved);
-
-    }catch(error){
-
-        console.error(
-            "Invalid saved data",
-            error
-        );
-
+    if(!data){
         return;
-
     }
 
 
@@ -3551,11 +3600,11 @@ function setValue(id,value){
    CLEAR ALL
 ========================================================= */
 
-function clearAll(){
+async function clearAll(){
 
     const confirmDelete =
         confirm(
-            "Are you sure you want to delete all professor profile data?"
+            "Are you sure you want to delete all professor profile data online?"
         );
 
 
@@ -3563,17 +3612,32 @@ function clearAll(){
         return;
     }
 
+    try{
 
-    localStorage.removeItem(
-        STORAGE_KEY
-    );
+        const { error } =
+            await supabase
+                .from("professor_profile")
+                .delete()
+                .eq("id", PROFILE_ROW_ID);
 
-    localStorage.removeItem(
-        PHOTO_KEY
-    );
+        if(error){
+            throw error;
+        }
 
+        currentPhotoData = null;
+        selectedPhotoData = null;
+        location.reload();
 
-    location.reload();
+    }catch(error){
+
+        console.error("Supabase delete error:", error);
+
+        alert(
+            "Unable to delete the online profile.\n\n" +
+            error.message
+        );
+
+    }
 
 }
 
