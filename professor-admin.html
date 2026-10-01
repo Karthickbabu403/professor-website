@@ -613,6 +613,7 @@ textarea{
 
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 
@@ -1598,32 +1599,23 @@ textarea{
 
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 
 /* =========================================================
    SUPABASE CONFIGURATION
-   Replace these two placeholders with values from your
-   Supabase Project Settings -> API.
 ========================================================= */
 
 const SUPABASE_URL = "https://fumqtdhinkxvaytamkog.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_AD5a082KlCS3rzQfh-EQcA_XxJjRZlx";
 
-const supabase = window.supabase.createClient(
+const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
 );
 
 const PROFILE_ROW_ID = 1;
+
 let currentPhotoData = null;
-let selectedPhotoData = null;
-
-/* =========================================================
-   STORAGE KEYS
-   (Profile data is now stored online in Supabase.)
-========================================================= */
-
 
 
 /* =========================================================
@@ -1677,7 +1669,6 @@ document
             reader.onload =
                 function(event){
 
-                    selectedPhotoData = event.target.result;
                     currentPhotoData = event.target.result;
 
                     document
@@ -1701,25 +1692,22 @@ document
 
 async function showDefaultPhoto(){
 
-    let photo = null;
+    let photo = currentPhotoData;
 
-    try{
-        const { data, error } =
-            await supabase
+    if(!photo){
+        try{
+            const { data: row, error } = await supabaseClient
                 .from("professor_profile")
                 .select("photo_data")
                 .eq("id", PROFILE_ROW_ID)
                 .maybeSingle();
 
-        if(error){
-            throw error;
+            if(error) throw error;
+            photo = row ? row.photo_data : null;
+            currentPhotoData = photo || null;
+        }catch(error){
+            console.error("Unable to load photo:", error);
         }
-
-        photo = data?.photo_data || null;
-        currentPhotoData = photo;
-
-    }catch(error){
-        console.error("Unable to load professor photo:", error);
     }
 
     if(photo){
@@ -3083,18 +3071,14 @@ async function saveAll(){
 
     try{
 
-        const { error } =
-            await supabase
-                .from("professor_profile")
-                .upsert(
-                    {
-                        id: PROFILE_ROW_ID,
-                        profile_data: profile,
-                        photo_data: currentPhotoData || null,
-                        updated_at: new Date().toISOString()
-                    },
-                    { onConflict: "id" }
-                );
+        const { error } = await supabaseClient
+            .from("professor_profile")
+            .upsert({
+                id: PROFILE_ROW_ID,
+                profile_data: profile,
+                photo_data: currentPhotoData || null,
+                updated_at: new Date().toISOString()
+            }, { onConflict: "id" });
 
         if(error){
             throw error;
@@ -3103,9 +3087,7 @@ async function saveAll(){
         document
             .getElementById("status")
             .textContent =
-            "✓ Profile saved online successfully";
-
-        selectedPhotoData = null;
+            "✓ Profile saved to online database";
 
         return true;
 
@@ -3113,10 +3095,13 @@ async function saveAll(){
 
         console.error("Supabase save error:", error);
 
+        document
+            .getElementById("status")
+            .textContent = "";
+
         alert(
-            "Unable to save profile online.\n\n" +
-            "Check your Supabase URL/key, table setup, and RLS policies.\n\n" +
-            error.message
+            "Unable to save profile.\n\n" +
+            (error.message || "Please check Supabase settings and internet connection.")
         );
 
         return false;
@@ -3132,18 +3117,12 @@ async function saveAll(){
 
 async function saveAndView(){
 
-    if(await saveAll()){
+    const saved = await saveAll();
 
-        setTimeout(
-            function(){
-
-                window.location.href =
-                    "index.html";
-
-            },
-            400
-        );
-
+    if(saved){
+        setTimeout(function(){
+            window.location.href = "./index.html";
+        }, 400);
     }
 
 }
@@ -3172,45 +3151,33 @@ async function loadAll(){
     let data = null;
 
     try{
+        const { data: row, error } = await supabaseClient
+            .from("professor_profile")
+            .select("profile_data, photo_data")
+            .eq("id", PROFILE_ROW_ID)
+            .maybeSingle();
 
-        const { data: row, error } =
-            await supabase
-                .from("professor_profile")
-                .select("profile_data, photo_data")
-                .eq("id", PROFILE_ROW_ID)
-                .maybeSingle();
+        if(error) throw error;
 
-        if(error){
-            throw error;
+        if(row){
+            data = row.profile_data || null;
+            currentPhotoData = row.photo_data || currentPhotoData;
         }
-
-        if(!row){
-            /* No online profile has been created yet. */
-            return;
-        }
-
-        data = row.profile_data || null;
-        currentPhotoData = row.photo_data || null;
-
     }catch(error){
-
-        console.error(
-            "Unable to load online profile:",
-            error
-        );
-
-        alert(
-            "Unable to load profile from Supabase.\n\n" +
-            "Check your Supabase URL/key, table setup, and RLS policies.\n\n" +
-            error.message
-        );
-
+        console.error("Unable to load profile from Supabase:", error);
+        alert("Unable to load online profile data.\n\n" + (error.message || "Check Supabase settings."));
         return;
-
     }
 
     if(!data){
+
+        /*
+            IMPORTANT:
+            No default input data is inserted.
+        */
+
         return;
+
     }
 
 
@@ -3602,43 +3569,30 @@ function setValue(id,value){
 
 async function clearAll(){
 
-    const confirmDelete =
-        confirm(
-            "Are you sure you want to delete all professor profile data online?"
-        );
-
+    const confirmDelete = confirm(
+        "Are you sure you want to delete all professor profile data from the online database?"
+    );
 
     if(!confirmDelete){
         return;
     }
 
     try{
+        const { error } = await supabaseClient
+            .from("professor_profile")
+            .delete()
+            .eq("id", PROFILE_ROW_ID);
 
-        const { error } =
-            await supabase
-                .from("professor_profile")
-                .delete()
-                .eq("id", PROFILE_ROW_ID);
-
-        if(error){
-            throw error;
-        }
+        if(error) throw error;
 
         currentPhotoData = null;
-        selectedPhotoData = null;
+        alert("All professor profile data deleted.");
         location.reload();
 
     }catch(error){
-
-        console.error("Supabase delete error:", error);
-
-        alert(
-            "Unable to delete the online profile.\n\n" +
-            error.message
-        );
-
+        console.error("Delete error:", error);
+        alert("Unable to delete profile.\n\n" + (error.message || "Check Supabase settings."));
     }
-
 }
 
 

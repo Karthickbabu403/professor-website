@@ -1040,6 +1040,7 @@ body.dark .research-tag{
 }
 
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 
@@ -1061,7 +1062,8 @@ body.dark .research-tag{
 
         <div
             class="brand secret-admin-trigger"
-            title="">
+            title=""
+            ondblclick="openAdminLogin(event)">
 
             <div class="brand-logo">
                 PA
@@ -1914,29 +1916,22 @@ body.dark .research-tag{
      JAVASCRIPT
 ===================================================== -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 
 /* =========================================================
    SUPABASE CONFIGURATION
-   Replace these two placeholders with values from your
-   Supabase Project Settings -> API.
+   Replace ONLY these two values with your project details.
 ========================================================= */
 
 const SUPABASE_URL = "https://fumqtdhinkxvaytamkog.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_AD5a082KlCS3rzQfh-EQcA_XxJjRZlx";
 
-const supabase = window.supabase.createClient(
+const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
 );
 
 const PROFILE_ROW_ID = 1;
-
-/* =========================================================
-   STORAGE
-========================================================= */
-
 
 
 /* =========================================================
@@ -1984,16 +1979,15 @@ function safeURL(url){
 async function loadProfile(){
 
     let data = null;
-    let photo = null;
+    let photoData = null;
 
     try{
 
-        const { data: row, error } =
-            await supabase
-                .from("professor_profile")
-                .select("profile_data, photo_data")
-                .eq("id", PROFILE_ROW_ID)
-                .maybeSingle();
+        const { data: row, error } = await supabaseClient
+            .from("professor_profile")
+            .select("profile_data, photo_data")
+            .eq("id", PROFILE_ROW_ID)
+            .maybeSingle();
 
         if(error){
             throw error;
@@ -2001,19 +1995,16 @@ async function loadProfile(){
 
         if(row){
             data = row.profile_data || null;
-            photo = row.photo_data || null;
+            photoData = row.photo_data || null;
         }
 
     }catch(error){
 
-        console.error(
-            "Unable to load profile from Supabase:",
-            error
-        );
+        console.error("Unable to load profile from Supabase:", error);
 
         renderEmptySections();
-        return;
 
+        return;
     }
 
 
@@ -2097,6 +2088,8 @@ async function loadProfile(){
     /* =====================================================
        PHOTO
     ===================================================== */
+
+    const photo = photoData || null;
 
     const photoElement =
         document.getElementById("profilePhoto");
@@ -2887,15 +2880,15 @@ darkModeBtn.addEventListener(
 
 /* =========================================================
    SECRET ADMIN LOGIN
+   Double-click the header/brand.
 ========================================================= */
 
-const secretAdmin =
-    document.querySelector(".secret-admin-trigger");
+function openAdminLogin(event){
 
-const adminHeader =
-    document.querySelector(".navbar");
+    if(event && event.target && event.target.closest("a, button, input, select, textarea")){
+        return;
+    }
 
-function openAdminLogin(){
     const password = prompt("Enter Admin Password");
 
     if(password === null){
@@ -2903,52 +2896,28 @@ function openAdminLogin(){
     }
 
     if(password === "123"){
-        window.location.href = "professor-admin.html";
+        window.location.href = "./professor-admin.html";
     }else{
         alert("Incorrect password.\nAccess denied.");
     }
 }
 
-// Double-click the logo/name OR anywhere in the header to open Admin.
+const secretAdmin = document.querySelector(".secret-admin-trigger");
+
 if(secretAdmin){
     secretAdmin.addEventListener("dblclick", openAdminLogin);
 }
 
-if(adminHeader){
-    adminHeader.addEventListener("dblclick", function(event){
-        // Prevent a second trigger when the secret brand itself is double-clicked.
-        if(event.target.closest(".secret-admin-trigger")){
-            return;
-        }
-        openAdminLogin();
-    });
-}
-
-
-/* =========================================================
-   ONLINE PROFILE REFRESH
-========================================================= */
-
-/*
-    The profile is stored in Supabase, so refresh it whenever
-    this page becomes visible again on any device.
-*/
-
-document.addEventListener(
-    "visibilitychange",
-    function(){
-        if(!document.hidden){
-            loadProfile();
-        }
-    }
-);
-
-window.addEventListener(
-    "focus",
-    function(){
+/* Refresh profile whenever the public page becomes visible again. */
+document.addEventListener("visibilitychange", function(){
+    if(!document.hidden){
         loadProfile();
     }
-);
+});
+
+window.addEventListener("focus", function(){
+    loadProfile();
+});
 
 
 /* =========================================================
