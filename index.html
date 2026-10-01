@@ -1040,6 +1040,19 @@ body.dark .research-tag{
 }
 
 </style>
+<script>
+function openAdminLogin(event){
+    if(event){ event.preventDefault(); event.stopPropagation(); }
+    const password = prompt("Enter Admin Password");
+    if(password === null){ return; }
+    if(password === "123"){
+        window.location.href = "./professor-admin.html";
+    }else{
+        alert("Incorrect password.\nAccess denied.");
+    }
+}
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
@@ -1813,6 +1826,16 @@ body.dark .research-tag{
 
             </div>
 
+            <div class="data-card">
+                <div class="small">IRINS</div>
+                <h3 id="irins">—</h3>
+            </div>
+
+            <div class="data-card">
+                <div class="small">OpenAlex</div>
+                <h3 id="openAlex">—</h3>
+            </div>
+
         </div>
 
     </div>
@@ -2209,29 +2232,18 @@ async function loadProfile(){
 
 
     if(researchAreas.length === 0){
-
-        researchContainer.innerHTML =
-            '<div class="empty">No research areas added.</div>';
-
+        researchContainer.innerHTML = '<div class="empty">No research areas added.</div>';
     }else{
-
         researchAreas.forEach(area => {
-
             if(!area) return;
-
-            const tag =
-                document.createElement("div");
-
-            tag.className =
-                "research-tag";
-
-            tag.textContent =
-                area;
-
+            const name = typeof area === "string" ? area : (area.name || area.title || "Research Interest");
+            const description = typeof area === "string" ? "" : (area.description || "");
+            const keywords = typeof area === "string" ? "" : (area.keywords || "");
+            const tag = document.createElement("div");
+            tag.className = "research-tag";
+            tag.innerHTML = `<strong>${escapeHTML(name)}</strong>${description ? `<span style="display:block;margin-top:6px;font-size:.9em;">${escapeHTML(description)}</span>` : ""}${keywords ? `<span style="display:block;margin-top:5px;font-size:.78em;opacity:.8;">${escapeHTML(keywords)}</span>` : ""}`;
             researchContainer.appendChild(tag);
-
         });
-
     }
 
 
@@ -2278,6 +2290,8 @@ async function loadProfile(){
                 <div class="timeline-title">
                     ${escapeHTML(item.title || "")}
                 </div>
+
+                ${(item.institution || item.role) ? `<div class="small" style="margin-top:5px;">${escapeHTML(item.role || "")}${item.role && item.institution ? " · " : ""}${escapeHTML(item.institution || "")}</div>` : ""}
 
                 <div class="timeline-description">
                     ${escapeHTML(item.description || "")}
@@ -2391,6 +2405,9 @@ async function loadProfile(){
         identifiers.researcherId
     );
 
+    setIdentifier("irins", identifiers.irins);
+    setIdentifier("openAlex", identifiers.openAlex);
+
 
     /* =====================================================
        CONTACT
@@ -2439,495 +2456,86 @@ function setIdentifier(id,value){
 ========================================================= */
 
 function renderEducation(items){
-
-    const container =
-        document.getElementById("educationList");
-
-    container.innerHTML = "";
-
-
-    if(items.length === 0){
-
-        container.innerHTML =
-            '<div class="empty">No education details added.</div>';
-
-        return;
-    }
-
-
-    items.forEach(item => {
-
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "data-card";
-
-
-        card.innerHTML = `
-
-            <div class="small">
-                ${escapeHTML(item.year || "")}
-            </div>
-
-            <h3>
-                ${escapeHTML(item.degree || "Qualification")}
-            </h3>
-
-            <p>
-                ${escapeHTML(item.institution || "")}
-            </p>
-
-            ${
-                item.specialization
-                ? `
-                    <p style="margin-top:7px;">
-                        ${escapeHTML(item.specialization)}
-                    </p>
-                  `
-                : ""
-            }
-
-        `;
-
-        container.appendChild(card);
-
+    const container=document.getElementById("educationList"); container.innerHTML="";
+    if(items.length===0){ container.innerHTML='<div class="empty">No education details added.</div>'; return; }
+    items.forEach(item=>{
+      const card=document.createElement("div"); card.className="data-card";
+      card.innerHTML=`<div class="small">${escapeHTML(item.year||"")}</div><h3>${escapeHTML(item.degree||"Qualification")}</h3><p>${escapeHTML(item.institution||"")}</p>${item.university?`<p style="margin-top:7px;">University / Board: ${escapeHTML(item.university)}</p>`:""}${item.specialization?`<p style="margin-top:7px;">Specialization: ${escapeHTML(item.specialization)}</p>`:""}${item.grade?`<p style="margin-top:7px;">Grade / CGPA: ${escapeHTML(item.grade)}</p>`:""}`;
+      container.appendChild(card);
     });
-
 }
-
 
 /* =========================================================
    EXPERIENCE
 ========================================================= */
 
 function renderExperience(items){
-
-    const container =
-        document.getElementById("experienceList");
-
-    container.innerHTML = "";
-
-
-    if(items.length === 0){
-
-        container.innerHTML =
-            '<div class="empty">No experience details added.</div>';
-
-        return;
-    }
-
-
-    items.forEach(item => {
-
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "data-card";
-
-
-        card.innerHTML = `
-
-            <div class="small">
-                ${escapeHTML(item.period || "")}
-            </div>
-
-            <h3>
-                ${escapeHTML(item.designation || "Position")}
-            </h3>
-
-            <p>
-                ${escapeHTML(item.institution || "")}
-            </p>
-
-            <p style="margin-top:10px;">
-                ${escapeHTML(item.description || "")}
-            </p>
-
-        `;
-
-        container.appendChild(card);
-
+    const container=document.getElementById("experienceList"); container.innerHTML="";
+    if(items.length===0){ container.innerHTML='<div class="empty">No experience details added.</div>'; return; }
+    items.forEach(item=>{
+      const card=document.createElement("div"); card.className="data-card";
+      card.innerHTML=`<div class="small">${escapeHTML(item.period||"")}</div><h3>${escapeHTML(item.designation||"Position")}</h3><p>${escapeHTML(item.institution||"")}</p>${item.experienceType?`<p style="margin-top:7px;">Type: ${escapeHTML(item.experienceType)}</p>`:""}${item.location?`<p style="margin-top:7px;">Location: ${escapeHTML(item.location)}</p>`:""}<p style="margin-top:10px;">${escapeHTML(item.description||"")}</p>`;
+      container.appendChild(card);
     });
-
 }
-
 
 /* =========================================================
    PUBLICATIONS
 ========================================================= */
 
 function renderPublications(items){
-
-    const container =
-        document.getElementById("publicationList");
-
-    container.innerHTML = "";
-
-
-    if(items.length === 0){
-
-        container.innerHTML =
-            '<div class="empty">No publications added.</div>';
-
-        return;
-    }
-
-
-    items.forEach(item => {
-
-        const element =
-            document.createElement("div");
-
-        element.className =
-            "publication";
-
-
-        const link =
-            safeURL(item.link);
-
-
-        element.innerHTML = `
-
-            <div class="pub-year">
-                ${escapeHTML(item.year || "")}
-            </div>
-
-            <div>
-
-                <div class="pub-title">
-                    ${escapeHTML(item.title || "Publication")}
-                </div>
-
-                <div class="pub-authors">
-                    ${escapeHTML(item.authors || "")}
-                </div>
-
-                <span class="pub-type">
-                    ${escapeHTML(item.type || "Publication")}
-                </span>
-
-                ${
-                    link
-                    ? `
-                        <br>
-                        <a
-                            href="${escapeHTML(link)}"
-                            target="_blank"
-                            rel="noopener noreferrer">
-
-                            View Publication →
-
-                        </a>
-                      `
-                    : ""
-                }
-
-            </div>
-
-        `;
-
-        container.appendChild(element);
-
+    const container=document.getElementById("publicationList"); container.innerHTML="";
+    if(items.length===0){ container.innerHTML='<div class="empty">No publications added.</div>'; return; }
+    items.forEach(item=>{
+      const element=document.createElement("div"); element.className="publication"; const link=safeURL(item.link);
+      const meta=[item.journal,item.year?`Year: ${item.year}`:"",item.volume?`Vol. ${item.volume}`:"",item.issue?`Issue ${item.issue}`:"",item.articleNumber?`Article No. ${item.articleNumber}`:"",item.pages?`Pages ${item.pages}`:""].filter(Boolean).join(" · ");
+      const impact=item.citations!==undefined && item.citations!=="" ? `<span class="pub-type">${escapeHTML(item.citations)} Citations</span>` : "";
+      element.innerHTML=`<div class="pub-year">${escapeHTML(item.year||"")}</div><div><div class="pub-title">${escapeHTML(item.title||"Publication")}</div><div class="pub-authors">${escapeHTML(item.authors||"")}</div>${meta?`<div style="margin-top:8px;font-size:.9em;opacity:.82;">${escapeHTML(meta)}</div>`:""}${item.type?`<span class="pub-type">${escapeHTML(item.type)}</span>`:""}${impact?` ${impact}`:""}${item.doi?`<div style="margin-top:7px;">DOI: ${escapeHTML(item.doi)}</div>`:""}${link?`<br><a href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer">View Publication →</a>`:""}</div>`;
+      container.appendChild(element);
     });
-
 }
-
 
 /* =========================================================
    PATENTS
 ========================================================= */
 
 function renderPatents(items){
-
-    const container =
-        document.getElementById("patentList");
-
-    container.innerHTML = "";
-
-
-    if(items.length === 0){
-
-        container.innerHTML =
-            '<div class="empty">No patents added.</div>';
-
-        return;
-    }
-
-
-    items.forEach(item => {
-
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "data-card";
-
-
-        card.innerHTML = `
-
-            <div class="small">
-                ${escapeHTML(item.year || "")}
-            </div>
-
-            <h3>
-                ${escapeHTML(item.title || "Patent")}
-            </h3>
-
-            <p>
-                Patent No:
-                ${escapeHTML(item.number || "—")}
-            </p>
-
-            <p style="margin-top:8px;">
-                Status:
-                ${escapeHTML(item.status || "—")}
-            </p>
-
-        `;
-
-        container.appendChild(card);
-
+    const container=document.getElementById("patentList"); container.innerHTML="";
+    if(items.length===0){ container.innerHTML='<div class="empty">No patents added.</div>'; return; }
+    items.forEach(item=>{
+      const card=document.createElement("div"); card.className="data-card"; const link=safeURL(item.link);
+      card.innerHTML=`<div class="small">${escapeHTML(item.year||"")}</div><h3>${escapeHTML(item.title||"Patent")}</h3><p>Patent No: ${escapeHTML(item.number||"—")}</p>${item.inventors?`<p style="margin-top:8px;">Inventors: ${escapeHTML(item.inventors)}</p>`:""}${item.status?`<p style="margin-top:8px;">Status: ${escapeHTML(item.status)}</p>`:""}${item.office?`<p style="margin-top:8px;">Office: ${escapeHTML(item.office)}</p>`:""}${item.filingDate?`<p style="margin-top:8px;">Filing / Publication Date: ${escapeHTML(item.filingDate)}</p>`:""}${item.description?`<p style="margin-top:10px;">${escapeHTML(item.description)}</p>`:""}${link?`<p style="margin-top:10px;"><a href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer">View Patent →</a></p>`:""}`;
+      container.appendChild(card);
     });
-
 }
-
 
 /* =========================================================
    PROJECTS
 ========================================================= */
 
 function renderProjects(items){
-
-    const container =
-        document.getElementById("projectList");
-
-    container.innerHTML = "";
-
-
-    if(items.length === 0){
-
-        container.innerHTML =
-            '<div class="empty">No research projects added.</div>';
-
-        return;
-    }
-
-
-    items.forEach(item => {
-
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "data-card";
-
-
-        card.innerHTML = `
-
-            <div class="small">
-                ${escapeHTML(item.year || "")}
-            </div>
-
-            <h3>
-                ${escapeHTML(item.title || "Research Project")}
-            </h3>
-
-            <p>
-                ${escapeHTML(item.agency || "")}
-            </p>
-
-            <p style="margin-top:10px;">
-                ${escapeHTML(item.description || "")}
-            </p>
-
-        `;
-
-        container.appendChild(card);
-
+    const container=document.getElementById("projectList"); container.innerHTML="";
+    if(items.length===0){ container.innerHTML='<div class="empty">No research projects added.</div>'; return; }
+    items.forEach(item=>{
+      const card=document.createElement("div"); card.className="data-card"; const link=safeURL(item.link);
+      card.innerHTML=`<div class="small">${escapeHTML(item.year||"")}</div><h3>${escapeHTML(item.title||"Research Project")}</h3>${item.agency?`<p>${escapeHTML(item.agency)}</p>`:""}${item.role?`<p style="margin-top:7px;">Role: ${escapeHTML(item.role)}</p>`:""}${item.amount?`<p style="margin-top:7px;">Funding: ${escapeHTML(item.amount)}</p>`:""}${item.duration?`<p style="margin-top:7px;">Duration: ${escapeHTML(item.duration)}</p>`:""}${item.status?`<p style="margin-top:7px;">Status: ${escapeHTML(item.status)}</p>`:""}${item.description?`<p style="margin-top:10px;">${escapeHTML(item.description)}</p>`:""}${link?`<p style="margin-top:10px;"><a href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer">Project Link →</a></p>`:""}`;
+      container.appendChild(card);
     });
-
 }
-
 
 /* =========================================================
    AWARDS
 ========================================================= */
 
 function renderAwards(items){
-
-    const container =
-        document.getElementById("awardList");
-
-    container.innerHTML = "";
-
-
-    if(items.length === 0){
-
-        container.innerHTML =
-            '<div class="empty">No awards added.</div>';
-
-        return;
-    }
-
-
-    items.forEach(item => {
-
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "data-card";
-
-
-        card.innerHTML = `
-
-            <div class="small">
-                ${escapeHTML(item.year || "")}
-            </div>
-
-            <h3>
-                ${escapeHTML(item.title || "Achievement")}
-            </h3>
-
-            <p>
-                ${escapeHTML(item.organization || "")}
-            </p>
-
-        `;
-
-        container.appendChild(card);
-
+    const container=document.getElementById("awardList"); container.innerHTML="";
+    if(items.length===0){ container.innerHTML='<div class="empty">No awards added.</div>'; return; }
+    items.forEach(item=>{
+      const card=document.createElement("div"); card.className="data-card"; const link=safeURL(item.link);
+      card.innerHTML=`<div class="small">${escapeHTML(item.year||"")}</div><h3>${escapeHTML(item.title||"Achievement")}</h3>${item.organization?`<p>${escapeHTML(item.organization)}</p>`:""}${item.category?`<p style="margin-top:7px;">Category: ${escapeHTML(item.category)}</p>`:""}${item.description?`<p style="margin-top:10px;">${escapeHTML(item.description)}</p>`:""}${link?`<p style="margin-top:10px;"><a href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer">View Evidence →</a></p>`:""}`;
+      container.appendChild(card);
     });
-
 }
-
-
-/* =========================================================
-   EMPTY SECTIONS
-========================================================= */
-
-function renderEmptySections(){
-
-    document.getElementById("researchAreas").innerHTML =
-        '<div class="empty">Add research areas from the admin panel.</div>';
-
-    document.getElementById("journeyList").innerHTML =
-        '<div class="empty">Add academic journey from the admin panel.</div>';
-
-    document.getElementById("educationList").innerHTML =
-        '<div class="empty">Add education details from the admin panel.</div>';
-
-    document.getElementById("experienceList").innerHTML =
-        '<div class="empty">Add professional experience from the admin panel.</div>';
-
-    document.getElementById("publicationList").innerHTML =
-        '<div class="empty">Add publications from the admin panel.</div>';
-
-    document.getElementById("patentList").innerHTML =
-        '<div class="empty">Add patents from the admin panel.</div>';
-
-    document.getElementById("projectList").innerHTML =
-        '<div class="empty">Add research projects from the admin panel.</div>';
-
-    document.getElementById("awardList").innerHTML =
-        '<div class="empty">Add awards from the admin panel.</div>';
-
-}
-
-
-/* =========================================================
-   DARK MODE
-========================================================= */
-
-const darkModeBtn =
-    document.getElementById("darkModeBtn");
-
-
-function applyDarkMode(){
-
-    const dark =
-        localStorage.getItem(
-            "academicDarkMode"
-        ) === "true";
-
-    document.body.classList.toggle(
-        "dark",
-        dark
-    );
-
-}
-
-
-darkModeBtn.addEventListener(
-    "click",
-    function(){
-
-        const isDark =
-            document.body.classList.contains("dark");
-
-        localStorage.setItem(
-            "academicDarkMode",
-            String(!isDark)
-        );
-
-        applyDarkMode();
-
-    }
-);
-
-
-/* =========================================================
-   SECRET ADMIN LOGIN
-   Double-click the header/brand.
-========================================================= */
-
-function openAdminLogin(event){
-
-    if(event && event.target && event.target.closest("a, button, input, select, textarea")){
-        return;
-    }
-
-    const password = prompt("Enter Admin Password");
-
-    if(password === null){
-        return;
-    }
-
-    if(password === "123"){
-        window.location.href = "./professor-admin.html";
-    }else{
-        alert("Incorrect password.\nAccess denied.");
-    }
-}
-
-const secretAdmin = document.querySelector(".secret-admin-trigger");
-
-if(secretAdmin){
-    secretAdmin.addEventListener("dblclick", openAdminLogin);
-}
-
-/* Refresh profile whenever the public page becomes visible again. */
-document.addEventListener("visibilitychange", function(){
-    if(!document.hidden){
-        loadProfile();
-    }
-});
-
-window.addEventListener("focus", function(){
-    loadProfile();
-});
-
-
-/* =========================================================
-   FOOTER YEAR
-========================================================= */
-
-document.getElementById("footerYear")
-    .textContent =
-    new Date().getFullYear();
-
 
 /* =========================================================
    INITIAL LOAD
