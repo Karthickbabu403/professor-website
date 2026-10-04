@@ -704,6 +704,21 @@ section{
 }
 
 
+
+/* CLICKABLE ACADEMIC IDENTIFIERS / EMAIL */
+.data-card h3 a,
+.contact-card a{
+    color:inherit;
+    text-decoration:none;
+    transition:.2s;
+}
+
+.data-card h3 a:hover,
+.contact-card a:hover{
+    color:var(--teal);
+    text-decoration:underline;
+}
+
 /* =========================================================
    PUBLICATIONS
 ========================================================= */
@@ -1292,51 +1307,6 @@ function openAdminLogin(event){
 
                 <div
                     class="metric-value"
-                    id="metricI10">
-                    0
-                </div>
-
-                <div class="metric-label">
-                    i10-index
-                </div>
-
-            </div>
-
-
-            <div class="metric">
-
-                <div
-                    class="metric-value"
-                    id="metricPatents">
-                    0
-                </div>
-
-                <div class="metric-label">
-                    Patents
-                </div>
-
-            </div>
-
-
-            <div class="metric">
-
-                <div
-                    class="metric-value"
-                    id="metricBooks">
-                    0
-                </div>
-
-                <div class="metric-label">
-                    Books / Chapters
-                </div>
-
-            </div>
-
-
-            <div class="metric">
-
-                <div
-                    class="metric-value"
                     id="metricExperience">
                     0
                 </div>
@@ -1640,73 +1610,6 @@ function openAdminLogin(event){
     </div>
 
 </section>
-
-
-<!-- =====================================================
-     PATENTS
-===================================================== -->
-
-<section>
-
-    <div class="container">
-
-        <div class="section-head">
-
-            <div class="section-kicker">
-                Innovation
-            </div>
-
-            <h2 class="section-title">
-                Patents
-            </h2>
-
-        </div>
-
-
-        <div
-            class="cards-grid"
-            id="patentList">
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     PROJECTS
-===================================================== -->
-
-<section
-    style="background:#eef5f8;">
-
-    <div class="container">
-
-        <div class="section-head">
-
-            <div class="section-kicker">
-                Research
-            </div>
-
-            <h2 class="section-title">
-                Research Projects
-            </h2>
-
-        </div>
-
-
-        <div
-            class="cards-grid"
-            id="projectList">
-
-        </div>
-
-    </div>
-
-</section>
-
-
 <!-- =====================================================
      AWARDS
 ===================================================== -->
@@ -1763,31 +1666,6 @@ function openAdminLogin(event){
 
         <div class="cards-grid">
 
-            <div class="data-card">
-
-                <div class="small">
-                    VIDWAN
-                </div>
-
-                <h3 id="vidwan">
-                    —
-                </h3>
-
-            </div>
-
-
-            <div class="data-card">
-
-                <div class="small">
-                    ORCID
-                </div>
-
-                <h3 id="orcid">
-                    —
-                </h3>
-
-            </div>
-
 
             <div class="data-card">
 
@@ -1832,11 +1710,6 @@ function openAdminLogin(event){
                 <h3 id="irins">—</h3>
             </div>
 
-            <div class="data-card">
-                <div class="small">OpenAlex</div>
-                <h3 id="openAlex">—</h3>
-            </div>
-
         </div>
 
     </div>
@@ -1875,9 +1748,7 @@ function openAdminLogin(event){
                     Email
                 </span>
 
-                <strong id="contactEmail">
-                    —
-                </strong>
+                <strong><a id="contactEmail" href="mailto:">—</a></strong>
 
             </div>
 
@@ -2061,9 +1932,6 @@ function renderEmptySections(){
         metricPublications: "0",
         metricCitations: "0",
         metricHIndex: "0",
-        metricI10: "0",
-        metricPatents: "0",
-        metricBooks: "0",
         metricExperience: "0",
         contactEmail: "—",
         contactPhone: "—",
@@ -2086,8 +1954,6 @@ function renderEmptySections(){
         educationList: "No academic qualifications added.",
         experienceList: "No professional experience added.",
         publicationList: "No publications added.",
-        patentList: "No patents added.",
-        projectList: "No research projects added.",
         awardList: "No awards added."
     };
 
@@ -2098,7 +1964,7 @@ function renderEmptySections(){
         }
     });
 
-    ["vidwan","orcid","googleScholar","scopus","researcherId","irins","openAlex"].forEach(id => {
+    ["googleScholar","scopus","researcherId","irins"].forEach(id => {
         setIdentifier(id,"—");
     });
 }
@@ -2323,24 +2189,7 @@ async function loadProfile(){
     document.getElementById("metricHIndex")
         .textContent =
         metrics.hIndex || 0;
-
-
-    document.getElementById("metricI10")
-        .textContent =
-        metrics.i10Index || 0;
-
-
-    document.getElementById("metricPatents")
-        .textContent =
-        metrics.patents || 0;
-
-
-    document.getElementById("metricBooks")
-        .textContent =
-        metrics.books || 0;
-
-
-    document.getElementById("metricExperience")
+document.getElementById("metricExperience")
         .textContent =
         metrics.experienceYears || 0;
 
@@ -2469,28 +2318,6 @@ async function loadProfile(){
 
 
     /* =====================================================
-       PATENTS
-    ===================================================== */
-
-    renderPatents(
-        Array.isArray(data.patents)
-        ? data.patents
-        : []
-    );
-
-
-    /* =====================================================
-       PROJECTS
-    ===================================================== */
-
-    renderProjects(
-        Array.isArray(data.projects)
-        ? data.projects
-        : []
-    );
-
-
-    /* =====================================================
        AWARDS
     ===================================================== */
 
@@ -2508,17 +2335,6 @@ async function loadProfile(){
     const identifiers =
         data.identifiers || {};
 
-
-    setIdentifier(
-        "vidwan",
-        identifiers.vidwan
-    );
-
-    setIdentifier(
-        "orcid",
-        identifiers.orcid
-    );
-
     setIdentifier(
         "googleScholar",
         identifiers.googleScholar
@@ -2535,7 +2351,6 @@ async function loadProfile(){
     );
 
     setIdentifier("irins", identifiers.irins);
-    setIdentifier("openAlex", identifiers.openAlex);
 
 
     /* =====================================================
@@ -2546,9 +2361,12 @@ async function loadProfile(){
         data.contact || {};
 
 
-    document.getElementById("contactEmail")
-        .textContent =
-        contact.email || "—";
+    const emailElement = document.getElementById("contactEmail");
+    if(emailElement){
+        const email = (contact.email || "").trim();
+        emailElement.textContent = email || "—";
+        emailElement.href = email ? "mailto:" + email : "#";
+    }
 
 
     document.getElementById("contactPhone")
@@ -2569,14 +2387,16 @@ async function loadProfile(){
 
 function setIdentifier(id,value){
 
-    const element =
-        document.getElementById(id);
-
+    const element = document.getElementById(id);
     if(!element) return;
 
-    element.textContent =
-        value || "—";
+    const url = safeURL(value);
 
+    if(url){
+        element.innerHTML = `<a href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(value)}</a>`;
+    }else{
+        element.textContent = value || "—";
+    }
 }
 
 
@@ -2608,6 +2428,21 @@ function renderExperience(items){
     });
 }
 
+
+/* CLICKABLE ACADEMIC IDENTIFIERS / EMAIL */
+.data-card h3 a,
+.contact-card a{
+    color:inherit;
+    text-decoration:none;
+    transition:.2s;
+}
+
+.data-card h3 a:hover,
+.contact-card a:hover{
+    color:var(--teal);
+    text-decoration:underline;
+}
+
 /* =========================================================
    PUBLICATIONS
 ========================================================= */
@@ -2621,34 +2456,6 @@ function renderPublications(items){
       const impact=item.citations!==undefined && item.citations!=="" ? `<span class="pub-type">${escapeHTML(item.citations)} Citations</span>` : "";
       element.innerHTML=`<div class="pub-year">${escapeHTML(item.year||"")}</div><div><div class="pub-title">${escapeHTML(item.title||"Publication")}</div><div class="pub-authors">${escapeHTML(item.authors||"")}</div>${meta?`<div style="margin-top:8px;font-size:.9em;opacity:.82;">${escapeHTML(meta)}</div>`:""}${item.type?`<span class="pub-type">${escapeHTML(item.type)}</span>`:""}${impact?` ${impact}`:""}${item.doi?`<div style="margin-top:7px;">DOI: ${escapeHTML(item.doi)}</div>`:""}${link?`<br><a href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer">View Publication →</a>`:""}</div>`;
       container.appendChild(element);
-    });
-}
-
-/* =========================================================
-   PATENTS
-========================================================= */
-
-function renderPatents(items){
-    const container=document.getElementById("patentList"); container.innerHTML="";
-    if(items.length===0){ container.innerHTML='<div class="empty">No patents added.</div>'; return; }
-    items.forEach(item=>{
-      const card=document.createElement("div"); card.className="data-card"; const link=safeURL(item.link);
-      card.innerHTML=`<div class="small">${escapeHTML(item.year||"")}</div><h3>${escapeHTML(item.title||"Patent")}</h3><p>Patent No: ${escapeHTML(item.number||"—")}</p>${item.inventors?`<p style="margin-top:8px;">Inventors: ${escapeHTML(item.inventors)}</p>`:""}${item.status?`<p style="margin-top:8px;">Status: ${escapeHTML(item.status)}</p>`:""}${item.office?`<p style="margin-top:8px;">Office: ${escapeHTML(item.office)}</p>`:""}${item.filingDate?`<p style="margin-top:8px;">Filing / Publication Date: ${escapeHTML(item.filingDate)}</p>`:""}${item.description?`<p style="margin-top:10px;">${escapeHTML(item.description)}</p>`:""}${link?`<p style="margin-top:10px;"><a href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer">View Patent →</a></p>`:""}`;
-      container.appendChild(card);
-    });
-}
-
-/* =========================================================
-   PROJECTS
-========================================================= */
-
-function renderProjects(items){
-    const container=document.getElementById("projectList"); container.innerHTML="";
-    if(items.length===0){ container.innerHTML='<div class="empty">No research projects added.</div>'; return; }
-    items.forEach(item=>{
-      const card=document.createElement("div"); card.className="data-card"; const link=safeURL(item.link);
-      card.innerHTML=`<div class="small">${escapeHTML(item.year||"")}</div><h3>${escapeHTML(item.title||"Research Project")}</h3>${item.agency?`<p>${escapeHTML(item.agency)}</p>`:""}${item.role?`<p style="margin-top:7px;">Role: ${escapeHTML(item.role)}</p>`:""}${item.amount?`<p style="margin-top:7px;">Funding: ${escapeHTML(item.amount)}</p>`:""}${item.duration?`<p style="margin-top:7px;">Duration: ${escapeHTML(item.duration)}</p>`:""}${item.status?`<p style="margin-top:7px;">Status: ${escapeHTML(item.status)}</p>`:""}${item.description?`<p style="margin-top:10px;">${escapeHTML(item.description)}</p>`:""}${link?`<p style="margin-top:10px;"><a href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer">Project Link →</a></p>`:""}`;
-      container.appendChild(card);
     });
 }
 
